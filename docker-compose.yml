@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+  flask:
+    build:
+      context: ./path/to/subdirectory/containing/requirements.txt
+    ports:
+      - "5000:5000"
+    depends_on:
+      - elasticsearch
+  react:
+    build: ./react
+    ports:
+      - "3000:3000"
