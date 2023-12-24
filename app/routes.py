@@ -8,6 +8,8 @@ from app.controllers import user_controller
 from app.controllers import auth_controller
 from app.controllers import moderator_controller
 from app.controllers import admin_controller
+from app.controllers import article_controller
+
 
 # auth related routes
 app.add_url_rule('/signup', 'signup', auth_controller.signup, methods=['POST'])
@@ -29,6 +31,9 @@ app.add_url_rule('/moderator/create', 'create_moderator', moderator_controller.c
 app.add_url_rule('/admins', 'get_admins', admin_controller.get_admins, methods=['GET'])
 app.add_url_rule('/admin/create', 'create_admin', admin_controller.create_admin, methods=['POST'])
 
+# Article-related routes
+app.add_url_rule('/add_article', 'add_article', article_controller.add_article, methods=['POST'])
+app.add_url_rule('/articles', 'get_articles', article_controller.get_articles, methods=['GET'])
 
 
 if __name__ == '__main__':
