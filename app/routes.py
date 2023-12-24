@@ -34,6 +34,9 @@ app.add_url_rule('/admin/create', 'create_admin', admin_controller.create_admin,
 # Article-related routes
 app.add_url_rule('/add_article', 'add_article', article_controller.add_article, methods=['POST'])
 app.add_url_rule('/articles', 'get_articles', article_controller.get_articles, methods=['GET'])
+app.add_url_rule('/article/delete/<int:article_id>', 'delete_article', article_controller.delete_article, methods=['DELETE'])
+app.add_url_rule('/article/update/<int:article_id>', 'update_article', article_controller.update_article, methods=['PUT'])
+app.add_url_rule('/get_article/<int:id_article>', 'get_article', article_controller.get_article, methods=['GET'])
 
 
 if __name__ == '__main__':
