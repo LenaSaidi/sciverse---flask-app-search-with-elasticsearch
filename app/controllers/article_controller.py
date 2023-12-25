@@ -9,6 +9,7 @@ from sqlalchemy import ForeignKey
 from app.models import *
 from app import db
 from app import login_manager
+from elasticsearch import Elasticsearch
 
 
 @login_manager.user_loader
@@ -50,76 +51,89 @@ def get_article(article_id):
 
 #add article
 @jwt_required()
-def add_article():
-    try:
-        data = request.json
-        if not isinstance(data, dict):
-            raise ValueError("Invalid JSON data. Expected a dictionary.")
-        
-        current_date = datetime.utcnow()
 
-        new_article = Article(
-            title=data.get('title'),
-            abstract=data.get('abstract'),
-            full_text=data.get('full_text'),
-            pdf_url=data.get('pdf_url'),
-            date=current_date
+def add_article():
+    data = request.json
+    current_date = datetime.utcnow()  # Utilisez datetime.now() si vous préférez l'heure locale
+
+    new_article = Article(
+        title=data.get('title'),
+        abstract=data.get('abstract'),
+        full_text=data.get('full_text'),
+        pdf_url=data.get('pdf_url'),
+        date=current_date
+    )
+    db.session.add(new_article)
+    db.session.flush()
+
+    for author_data in data.get('authors', []):
+        author = Author(
+            name=author_data.get('name'),
+            email=author_data.get('email')
         )
-        db.session.add(new_article)
+        db.session.add(author)
         db.session.flush()
 
-        # Simplified data extraction for authors
-        authors_data = data.get('authors', [])
-        for author_data in authors_data:
-            name = author_data.get('name')
-            email = author_data.get('email')
+        relation = ArticleAuthor(article_id=new_article.id, author_id=author.id)
+        db.session.add(relation)
 
-            # Check if the author already exists
-            author = Author.query.filter_by(email=email).first()
-            if not author:
-                author = Author(name=name, email=email)
-                db.session.add(author)
-                try:
-                    db.session.flush()
-                except Exception as e:
-                    db.session.rollback()
-
-
-            relation = ArticleAuthor(article_id=new_article.id, author_id=author.id)
-            db.session.add(relation)
-
-            for institution_data in author_data.get('institutions', []):
-                institution = Institution(institution_name=institution_data.get('institution_name'))
-                db.session.add(institution)
-                db.session.flush()
-
-                author_institution = AuthorInstitution(author_id=author.id, institution_id=institution.id)
-                db.session.add(author_institution)
-
-        for keyword_data in data.get('keywords', []):
-            keyword = Keyword(keyword=keyword_data)
-            db.session.add(keyword)
+        for institution_data in author_data.get('institutions', []):
+            institution = Institution(institution_name=institution_data.get('institution_name'))
+            db.session.add(institution)
             db.session.flush()
 
-            relation = ArticleKeyword(article_id=new_article.id, keyword_id=keyword.id)
-            db.session.add(relation)
+            author_institution = AuthorInstitution(author_id=author.id, institution_id=institution.id)
+            db.session.add(author_institution)
 
-        for reference_data in data.get('references', []):
-            reference = BibliographicReference(reference=reference_data)
-            db.session.add(reference)
-            db.session.flush()
+    for keyword_data in data.get('keywords', []):
+        keyword = Keyword(keyword=keyword_data)
+        db.session.add(keyword)
+        db.session.flush()
 
-            relation = ArticleReference(article_id=new_article.id, reference_id=reference.id)
-            db.session.add(relation)
+        relation = ArticleKeyword(article_id=new_article.id, keyword_id=keyword.id)
+        db.session.add(relation)
 
+    for reference_data in data.get('references', []):
+        reference = BibliographicReference(reference=reference_data)
+        db.session.add(reference)
+        db.session.flush()
+
+        relation = ArticleReference(article_id=new_article.id, reference_id=reference.id)
+        db.session.add(relation)
+
+    try:
         db.session.commit()
-        return jsonify({'message': 'Article added successfully!'}), 201
-    except ValueError as ve:
+        
+        # Si la base de données est mise à jour avec succès, essayez d'indexer l'article dans Elasticsearch
+        try:
+            response = es.index(index='articles_index', body={
+                "title": data.get('title', ''),
+                "abstract": data.get('abstract', ''),
+                "full_text": data.get('full_text', ''),
+                "keywords": data.get('keywords', []),
+                "pdf_url": data.get('pdf_url', ''),
+                "references": data.get('references', []),
+                "date": data.get('date', ''),
+                "authors": data.get('authors', []),
+                "institution_names": [inst.get('institution_name', '') for author in data.get('authors', []) for inst in author.get('institutions', []) if inst.get('institution_name', '')]
+                # Vous pouvez ajouter d'autres champs si nécessaire
+            })
+            elasticsearch_id = response['_id']
+
+            # Ajoutez une entrée dans la table de correspondance
+            mapping_entry = ArticleElasticsearchMapping(article_id=new_article.id, elasticsearch_id=elasticsearch_id)
+            db.session.add(mapping_entry)
+            db.session.commit()
+            return jsonify({"message": "Article added and indexed successfully!"}), 201
+        except Exception as es_error:
+            # Si l'indexation dans Elasticsearch échoue, faites un rollback de la transaction de la base de données
+            db.session.rollback()
+            return jsonify({"error": f"Failed to index the article in Elasticsearch: {str(es_error)}"}), 500
+
+    except Exception as db_error:
+        # Si la mise à jour de la base de données échoue, renvoyez une erreur appropriée
         db.session.rollback()
-        return jsonify({'error': str(ve)}), 400
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f"Failed to add the article to the database: {str(db_error)}"}), 500
 
 
 
@@ -244,24 +258,32 @@ def edit_article(article_id):
 
 
 #delete article 
-    
 @jwt_required()
 def delete_article(article_id):
     article = Article.query.get(article_id)
 
     if not article:
-        return jsonify({'error': 'Article not found'}), 404
+        return jsonify({'error': 'Article not found!'}), 404
 
-    if current_user != article.author:
-        return jsonify({'error': 'Forbidden'}), 403
+    try:
+        db.session.delete(article)
+        db.session.commit()
 
-    # Delete the article and its associated records (e.g., ArticleEdits, Favorites)
-    ArticleEdit.query.filter_by(article_id=article.id).delete()
-    FavoriteArticle.query.filter_by(article_id=article.id).delete()
-    db.session.delete(article)
-    db.session.commit()
+        # Delete the article and its associated records (e.g., ArticleEdits, Favorites)
+        ArticleEdit.query.filter_by(article_id=article.id).delete()
+        FavoriteArticle.query.filter_by(article_id=article.id).delete()
+        db.session.delete(article)
+        db.session.commit()
 
-    return jsonify({'message': 'Article deleted successfully'})
+        return jsonify({'message': 'Article and associated data deleted successfully!'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+    # Retourner la liste des articles en format JSON
+    return jsonify({'articles': articles_list})
+
+
 
 @jwt_required()
 def get_article_edits(article_id):

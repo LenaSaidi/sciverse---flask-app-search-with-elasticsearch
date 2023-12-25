@@ -27,9 +27,9 @@ class Article(db.Model):
     full_text = db.Column(db.Text)
     pdf_url = db.Column(db.String(1000))
     date = db.Column(db.DateTime, default=datetime.utcnow)
-    authors = db.relationship('Author', secondary='article_author', backref=db.backref('articles', lazy='dynamic'))
-    keywords = db.relationship('Keyword', secondary='article_keyword', backref=db.backref('articles', lazy='dynamic'))
-    references = db.relationship('BibliographicReference', secondary='article_reference', backref=db.backref('articles', lazy='dynamic'))
+    authors = db.relationship('Author', secondary='article_author', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
+    keywords = db.relationship('Keyword', secondary='article_keyword', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
+    references = db.relationship('BibliographicReference', secondary='article_reference', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
     article_edits = db.relationship('ArticleEdit', backref='article', lazy='dynamic')
 
 class Author(db.Model):
