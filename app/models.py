@@ -76,3 +76,10 @@ class ArticleReference(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     article_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
     reference_id = db.Column(db.Integer, db.ForeignKey('bibliographic_references.id'))
+
+class ArticleElasticsearchMapping(db.Model):
+    __tablename__ = 'article_elasticsearch_mapping'
+
+    id = db.Column(db.Integer, primary_key=True)
+    article_id = db.Column(db.Integer, db.ForeignKey('articles.id'), nullable=False) 
+    elasticsearch_id = db.Column(db.String(255), nullable=False)   

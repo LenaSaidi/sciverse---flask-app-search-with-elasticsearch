@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import mysql.connector
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
+from elasticsearch import Elasticsearch
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sciverse'
@@ -15,6 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate()
 
+es = Elasticsearch(['http://localhost:9200'])
 
 # Initialize Flask-Migrate
 migrate.init_app(app, db)

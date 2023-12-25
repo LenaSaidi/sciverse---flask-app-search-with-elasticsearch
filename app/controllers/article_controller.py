@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import ForeignKey
 from app.models import *
+from elasticsearch import Elasticsearch
+from app import es
 
 
 def add_article():
@@ -57,10 +59,38 @@ def add_article():
 
     try:
         db.session.commit()
-        return jsonify({'message': 'Article added successfully!'}), 201
-    except Exception as e:
+        
+        # Si la base de données est mise à jour avec succès, essayez d'indexer l'article dans Elasticsearch
+        try:
+            response = es.index(index='articles_index', body={
+                "title": data.get('title', ''),
+                "abstract": data.get('abstract', ''),
+                "full_text": data.get('full_text', ''),
+                "keywords": data.get('keywords', []),
+                "pdf_url": data.get('pdf_url', ''),
+                "references": data.get('references', []),
+                "date": data.get('date', ''),
+                "authors": data.get('authors', []),
+                "institution_names": [inst.get('institution_name', '') for author in data.get('authors', []) for inst in author.get('institutions', []) if inst.get('institution_name', '')]
+                # Vous pouvez ajouter d'autres champs si nécessaire
+            })
+            elasticsearch_id = response['_id']
+
+            # Ajoutez une entrée dans la table de correspondance
+            mapping_entry = ArticleElasticsearchMapping(article_id=new_article.id, elasticsearch_id=elasticsearch_id)
+            db.session.add(mapping_entry)
+            db.session.commit()
+            return jsonify({"message": "Article added and indexed successfully!"}), 201
+        except Exception as es_error:
+            # Si l'indexation dans Elasticsearch échoue, faites un rollback de la transaction de la base de données
+            db.session.rollback()
+            return jsonify({"error": f"Failed to index the article in Elasticsearch: {str(es_error)}"}), 500
+
+    except Exception as db_error:
+        # Si la mise à jour de la base de données échoue, renvoyez une erreur appropriée
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f"Failed to add the article to the database: {str(db_error)}"}), 500
+
 
 def get_articles():
     # Récupérer tous les articles depuis la base de données
@@ -224,5 +254,4 @@ def get_article(id_article):
         'authors': auteurs_list,
         'references': references_list
     }
-
     return jsonify(article_data), 200    
