@@ -1,8 +1,8 @@
-"""fav_articles, edits_article
+"""favorite+edit
 
-Revision ID: ed1de0f656bc
-Revises: 8feee3e1f9ae
-Create Date: 2023-12-24 17:01:14.991507
+Revision ID: 2b296a869d71
+Revises: 
+Create Date: 2023-12-25 16:28:41.275859
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = 'ed1de0f656bc'
-down_revision = '8feee3e1f9ae'
+revision = '2b296a869d71'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -23,7 +23,6 @@ def upgrade():
     sa.Column('article_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('edited_at', sa.DateTime(), nullable=True),
-    sa.Column('edited_text', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['article_id'], ['articles.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.user_id'], ),
     sa.PrimaryKeyConstraint('id')

@@ -1,5 +1,6 @@
 # app/__init__.py
 
+from elasticsearch import Elasticsearch
 from flask import Flask
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
@@ -25,6 +26,7 @@ db = SQLAlchemy(app)
 migrate = Migrate()
 # Initialize Flask-Migrate
 migrate.init_app(app, db)
+es = Elasticsearch(['http://localhost:9200'])
 
 
 

@@ -3,6 +3,7 @@
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import app
+from app.elasticsearch import search_article
 from app.models import User
 from app.controllers import user_controller
 from app.controllers import auth_controller
@@ -39,6 +40,7 @@ app.add_url_rule('/articles', 'get_articles', article_controller.get_articles, m
 app.add_url_rule('/article/edit/<int:article_id>', 'edit_article', article_controller.edit_article, methods=['PUT'])
 app.add_url_rule('/article/delete/<int:article_id>', 'delete_article', article_controller.delete_article, methods=['DELETE'])
 app.add_url_rule('/article/edits/<int:article_id>', 'get_article_edits', article_controller.get_article_edits, methods=['GET'])
+app.add_url_rule('/search-article', 'search_article', search_article, methods=['POST'])
 
 
 # Fav_articles-related routes

@@ -10,6 +10,7 @@ from app.models import *
 from app import db
 from app import login_manager
 from elasticsearch import Elasticsearch
+from app import es
 
 
 @login_manager.user_loader
@@ -267,21 +268,13 @@ def delete_article(article_id):
 
     try:
         db.session.delete(article)
-        db.session.commit()
-
-        # Delete the article and its associated records (e.g., ArticleEdits, Favorites)
         ArticleEdit.query.filter_by(article_id=article.id).delete()
         FavoriteArticle.query.filter_by(article_id=article.id).delete()
-        db.session.delete(article)
         db.session.commit()
-
         return jsonify({'message': 'Article and associated data deleted successfully!'}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
-
-    # Retourner la liste des articles en format JSON
-    return jsonify({'articles': articles_list})
 
 
 
