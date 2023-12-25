@@ -11,7 +11,10 @@ def search_article():
 
     search_term = data['search_term']
     fields_to_search = data['fields']
-
+    # Vérifiez si les champs de recherche sont spécifiés à "all"
+    if fields_to_search == "all":
+        fields_to_search = ['title', 'abstract', 'full_text', 'keywords', 'references', 'date', 'authors', 'institution_names']
+    
     try:
         response = es.search(index='articles_index', body={
             'query': {
