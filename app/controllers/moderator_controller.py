@@ -2,6 +2,7 @@
 
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
+from flask_login import login_manager, LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from app.models import User
@@ -10,7 +11,7 @@ from app import jwt
 # Import routes directly in the controller
 # from app import routes
 
-
+@jwt_required()
 def get_moderators():
     moderators = User.query.filter_by(role='moderator').all()
     result = []
@@ -24,6 +25,7 @@ def get_moderators():
         result.append(moderator_data)
     return jsonify(result)
 
+@jwt_required()
 def create_moderator():
     if request.method == 'POST':
         # Extract data from the request JSON

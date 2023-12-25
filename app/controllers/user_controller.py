@@ -2,22 +2,25 @@
 
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
+from flask_login import login_manager, LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from app.models import User
 from app import jwt
 
+
 # Import routes directly in the controller
 # from app import routes
 
 
+# @login_required
 def get_users():
     users = User.query.all()
     result = []
     for user in users:
         user_data = {
         "user_id": user.user_id,
-        "username": user.username,
+        # "username": user.username,
         "password_hash": user.password_hash,
         "email": user.email,
         "firstName": user.firstName,
@@ -28,6 +31,7 @@ def get_users():
         result.append(user_data)
     return jsonify(result)
 
+@login_required
 def get_user(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -35,7 +39,7 @@ def get_user(user_id):
 
     user_data = {
         "user_id": user.user_id,
-        "username": user.username,
+        # "username": user.username,
         "password_hash": user.password_hash,
         "email": user.email,
         "firstName": user.firstName,
@@ -45,14 +49,14 @@ def get_user(user_id):
     }
     return jsonify(user_data)
 
-
+# @login_required
 def update_user(user_id):
     user = User.query.get(user_id)
     if not user:
         return jsonify({'message': 'User not found'}), 404
 
     data = request.json
-    new_username = data.get('username', user.username)
+    # new_username = data.get('username', user.username)
     new_password = data.get('password', user.password_hash)  # Keep the existing password if not provided
     new_email = data.get('email', user.email)
     new_first_name = data.get('firstName', user.firstName)
@@ -67,7 +71,7 @@ def update_user(user_id):
         return jsonify({'message': 'Email already exists. Please use a different email.'}), 400
 
     # Mettre à jour les informations de l'utilisateur
-    user.username = new_username
+    # user.username = new_username
     user.email = new_email
     user.firstName = new_first_name
     user.lastName = new_last_name
@@ -82,7 +86,7 @@ def update_user(user_id):
 
     return jsonify({'message': 'User updated successfully'})
 
-
+# @login_required
 def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -92,4 +96,5 @@ def delete_user(user_id):
     db.session.commit()
 
     return jsonify({'message': 'User deleted successfully'})
+
 

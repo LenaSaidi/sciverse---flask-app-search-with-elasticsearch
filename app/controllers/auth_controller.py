@@ -2,12 +2,14 @@
 
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
+from flask_login import login_manager, LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from app.models import User
 from app import jwt
+from app import login_manager
 
 # Import routes directly in the controller
 # from app import routes
@@ -18,7 +20,7 @@ def signup():
     if request.method == 'POST':
         # Extract data from the request JSON
         data = request.json
-        username = data.get('username')
+        # username = data.get('username')
         email = data.get('email')
         password = data.get('password')
         firstName = data.get('firstName')
@@ -35,7 +37,7 @@ def signup():
 
         # Create a new user
         new_user = User(            
-            username=username,
+            # username=username,
             email=email,
             password_hash=password_hash,
             firstName=firstName,
@@ -69,7 +71,7 @@ def signin():
 
         if user and check_password_hash(user.password_hash, password):
             # Create a JWT
-            access_token = create_access_token(identity=user.email)
+            access_token = create_access_token(identity=user.user_id)  
             return jsonify(access_token=access_token), 200
         else:
             return jsonify({"msg": "Invalid email or password"}), 401
@@ -90,6 +92,8 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
-
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.query.get(int(user_id))
 
 

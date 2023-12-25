@@ -2,6 +2,7 @@
 
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
+from flask_login import login_manager, LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from app.models import User
