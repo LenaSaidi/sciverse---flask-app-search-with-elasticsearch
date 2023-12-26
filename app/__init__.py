@@ -1,3 +1,4 @@
+
 # app/__init__.py
 
 from elasticsearch import Elasticsearch
@@ -18,8 +19,10 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'  # Set the login view
 
 jwt = JWTManager(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:sciversebdd@127.0.0.1:3306/sciverse' 
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:sciversebdd@127.0.0.1:3306/sciverse' 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:sciverse2023@127.0.0.1:3306/sciverse'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sciversedb.db'
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
