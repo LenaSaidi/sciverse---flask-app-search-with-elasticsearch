@@ -30,7 +30,8 @@ class Article(db.Model):
     authors = db.relationship('Author', secondary='article_author', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
     keywords = db.relationship('Keyword', secondary='article_keyword', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
     references = db.relationship('BibliographicReference', secondary='article_reference', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
-    article_edits = db.relationship('ArticleEdit', backref='article', lazy='dynamic')
+    article_edits = db.relationship('ArticleEdit', backref='article', lazy='dynamic', cascade="all, delete")
+    article_elasticsearch_mapping = db.relationship('ArticleElasticsearchMapping', backref='article', lazy='dynamic', cascade="all, delete")
 
 class Author(db.Model):
     __tablename__ = 'authors'
@@ -95,6 +96,13 @@ class ArticleEdit(db.Model):
     edited_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # edited_text = db.Column(db.Text)
+
+class ArticleElasticsearchMapping(db.Model):
+    __tablename__ = 'article_elasticsearch_mapping'
+
+    id = db.Column(db.Integer, primary_key=True)
+    article_id = db.Column(db.Integer, db.ForeignKey('articles.id'), nullable=False) 
+    elasticsearch_id = db.Column(db.String(255), nullable=False)   
 
 
 # @login_manager.user_loader
