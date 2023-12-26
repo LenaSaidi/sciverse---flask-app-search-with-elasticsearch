@@ -136,11 +136,39 @@ def add_article():
         db.session.rollback()
         return jsonify({'error': f"Failed to add the article to the database: {str(db_error)}"}), 500
 
-
-
-#get articles
+#get articles with fav of a specific user
 @jwt_required()
 def get_articles():
+    try:
+        # Get the user ID from the JWT token
+        user_id = get_jwt_identity()
+
+        # Query the user
+        user = User.query.get(user_id)
+
+        # Query all articles with favorite information
+        articles = Article.query.all()
+
+        # Create a response containing articles with a boolean indicating if it's a favorite
+        response_articles = [
+            {
+                'id': article.id,
+                'title': article.title,
+                'content': article.content,
+                'is_favorite': user in article.favorited_by
+            }
+            for article in articles
+        ]
+
+        return jsonify({'articles': response_articles}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+#get all articles of db without fav
+@jwt_required()
+def get_all_articles():
     # Récupérer tous les articles depuis la base de données
     articles = Article.query.all()
 

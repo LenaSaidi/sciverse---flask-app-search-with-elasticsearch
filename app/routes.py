@@ -37,6 +37,7 @@ app.add_url_rule('/admin/create', 'create_admin', admin_controller.create_admin,
 app.add_url_rule('/article/get/<int:article_id>', 'get_article', article_controller.get_article, methods=['GET'])
 app.add_url_rule('/article/add', 'add_article', article_controller.add_article, methods=['POST'])
 app.add_url_rule('/articles', 'get_articles', article_controller.get_articles, methods=['GET'])
+app.add_url_rule('/all-articles', 'get_all_articles', article_controller.get_all_articles, methods=['GET'])
 app.add_url_rule('/article/edit/<int:article_id>', 'edit_article', article_controller.edit_article, methods=['PUT'])
 app.add_url_rule('/article/delete/<int:article_id>', 'delete_article', article_controller.delete_article, methods=['DELETE'])
 app.add_url_rule('/article/edits/<int:article_id>', 'get_article_edits', article_controller.get_article_edits, methods=['GET'])
