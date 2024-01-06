@@ -42,7 +42,7 @@ app.add_url_rule('/article/edit/<int:article_id>', 'edit_article', article_contr
 app.add_url_rule('/article/delete/<int:article_id>', 'delete_article', article_controller.delete_article, methods=['DELETE'])
 app.add_url_rule('/article/edits/<int:article_id>', 'get_article_edits', article_controller.get_article_edits, methods=['GET'])
 app.add_url_rule('/search-article', 'search_article', search_article, methods=['POST'])
-
+app.add_url_rule('/article/gett/<int:article_id>', 'get_article_from_elasticsearch', article_controller.get_article_from_elasticsearch, methods=['GET'])
 
 # Fav_articles-related routes
 
