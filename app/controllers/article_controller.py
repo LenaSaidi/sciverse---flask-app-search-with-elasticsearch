@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, jsonify
 from flask_jwt_extended import current_user, get_jwt_identity
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
@@ -54,7 +55,9 @@ def get_article(article_id):
 @jwt_required()
 
 def add_article():
-    data = request.json
+    with open('jsonfile.json', 'r') as fichier:
+        data = json.load(fichier)
+   
     current_date = datetime.utcnow()  # Utilisez datetime.now() si vous préférez l'heure locale
 
     new_article = Article(

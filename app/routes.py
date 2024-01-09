@@ -34,7 +34,7 @@ app.add_url_rule('/admins', 'get_admins', admin_controller.get_admins, methods=[
 app.add_url_rule('/admin/create', 'create_admin', admin_controller.create_admin, methods=['POST'])
 
 # Article-related routes
-app.add_url_rule('/article/get/<int:article_id>', 'get_article', article_controller.get_article, methods=['GET'])
+app.add_url_rule('/article/getStatic/<int:article_id>', 'get_article', article_controller.get_article, methods=['GET'])
 app.add_url_rule('/article/add', 'add_article', article_controller.add_article, methods=['POST'])
 app.add_url_rule('/articles', 'get_articles', article_controller.get_articles, methods=['GET'])
 app.add_url_rule('/all-articles', 'get_all_articles', article_controller.get_all_articles, methods=['GET'])
@@ -42,7 +42,7 @@ app.add_url_rule('/article/edit/<int:article_id>', 'edit_article', article_contr
 app.add_url_rule('/article/delete/<int:article_id>', 'delete_article', article_controller.delete_article, methods=['DELETE'])
 app.add_url_rule('/article/edits/<int:article_id>', 'get_article_edits', article_controller.get_article_edits, methods=['GET'])
 app.add_url_rule('/search-article', 'search_article', search_article, methods=['POST'])
-app.add_url_rule('/article/gett/<int:article_id>', 'get_article_from_elasticsearch', article_controller.get_article_from_elasticsearch, methods=['GET'])
+app.add_url_rule('/article/get/<int:article_id>', 'get_article_from_elasticsearch', article_controller.get_article_from_elasticsearch, methods=['GET'])
 
 # Fav_articles-related routes
 
