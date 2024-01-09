@@ -16,9 +16,9 @@ class User(db.Model):
     lastName = db.Column(db.String(100))
     nature = db.Column(db.Text)
     role = db.Column(db.String(50), default='user')  # Default role is 'user'
-    favorite_articles = db.relationship('FavoriteArticle', backref='user', lazy='dynamic')
+    #favorite_articles = db.relationship('FavoriteArticle', backref='user', lazy='dynamic')
     # article_edits = db.relationship('ArticleEdit', backref='user', lazy='dynamic')
-    favorite_articles = db.relationship('Article', secondary='favorite_articles', backref='favorited_by')
+    favorite_articles = db.relationship('Article', secondary='favorite_articles', backref='users')
     
 
 class Article(db.Model):
@@ -34,7 +34,7 @@ class Article(db.Model):
     references = db.relationship('BibliographicReference', secondary='article_reference', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
     article_edits = db.relationship('ArticleEdit', backref='article', lazy='dynamic', cascade="all, delete")
     article_elasticsearch_mapping = db.relationship('ArticleElasticsearchMapping', backref='article', lazy='dynamic', cascade="all, delete")
-    favorited_by = db.relationship('User', secondary='favorite_articles', backref='favorite_articles', cascade="all, delete")
+    #favorited_by = db.relationship('User', secondary='favorite_articles', backref='favorite_articles', cascade="all, delete")
 
 class Author(db.Model):
     __tablename__ = 'authors'
@@ -89,7 +89,6 @@ class FavoriteArticle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     article_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
-    article = db.relationship('Article', backref=db.backref('favorites', lazy='dynamic'))
 
 class ArticleEdit(db.Model):
     __tablename__ = 'article_edits'

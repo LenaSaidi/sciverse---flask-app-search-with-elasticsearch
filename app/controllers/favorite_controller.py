@@ -41,7 +41,6 @@ def get_favorite_articles():
     articles = [
         {
             'id': fav.article_id,
-            'title': fav.article.title,
         }
         for fav in favorite_articles
     ]

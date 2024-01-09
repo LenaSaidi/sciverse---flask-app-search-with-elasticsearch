@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, jsonify
 from flask_jwt_extended import current_user, get_jwt_identity
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
@@ -9,7 +10,7 @@ from sqlalchemy import ForeignKey
 from app.models import *
 from app import db
 from app import login_manager
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, NotFoundError
 from app import es
 
 
@@ -54,7 +55,9 @@ def get_article(article_id):
 @jwt_required()
 
 def add_article():
-    data = request.json
+    with open('jsonfile.json', 'r') as fichier:
+        data = json.load(fichier)
+   
     current_date = datetime.utcnow()  # Utilisez datetime.now() si vous préférez l'heure locale
 
     new_article = Article(
@@ -155,7 +158,7 @@ def get_articles():
                 'id': article.id,
                 'title': article.title,
                 'content': article.content,
-                'is_favorite': user in article.favorited_by
+               'is_favorite': article in user.favorite_articles
             }
             for article in articles
         ]
@@ -297,14 +300,51 @@ def delete_article(article_id):
     try:
         db.session.delete(article)
         ArticleEdit.query.filter_by(article_id=article.id).delete()
-        FavoriteArticle.query.filter_by(article_id=article.id).delete()
+       #FavoriteArticle.query.filter_by(article_id=article.id).delete()
         db.session.commit()
         return jsonify({'message': 'Article and associated data deleted successfully!'}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+    
 
+@jwt_required()
+def get_article_from_elasticsearch(article_id):
+    try:
+        # Recherchez l'ID Elasticsearch associé à l'article_id dans la table de mappage
+        mapping_entry = ArticleElasticsearchMapping.query.filter_by(article_id=article_id).first()
 
+        if not mapping_entry:
+            return jsonify({'error': f'Mapping entry not found for article ID {article_id}'}), 404
+
+        # Récupérez l'elasticsearch_id de l'entrée de mappage
+        elasticsearch_id = mapping_entry.elasticsearch_id
+
+        # Recherchez l'article dans Elasticsearch en utilisant l'elasticsearch_id
+        response = es.get(index="articles_index", id=elasticsearch_id)
+        article_data = response["_source"]
+
+        # Formatez la réponse selon vos besoins
+        formatted_response = {
+            'id': article_id,
+            'title': article_data['title'],
+            'abstract': article_data['abstract'],
+            'full_text': article_data['full_text'],
+            'keywords': article_data['keywords'],
+            'pdf_url': article_data['pdf_url'],
+            'references': article_data['references'],
+            'date': article_data['date'],
+            'authors': article_data['authors'],
+            'institution_names': article_data['institution_names']
+        }
+
+        return jsonify({'article': formatted_response}), 200
+
+    except NotFoundError:
+        return jsonify({'error': f'Article not found in Elasticsearch with ID {elasticsearch_id}'}), 404
+
+    except Exception as e:
+        return jsonify({'error': f'Error retrieving article: {str(e)}'}), 500
 
 @jwt_required()
 def get_article_edits(article_id):
