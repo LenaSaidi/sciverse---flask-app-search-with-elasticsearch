@@ -8,6 +8,7 @@ services:
       - xpack.security.enabled=false  # Disable X-Pack security
     ports:
       - "9200:9200"
+    mem_limit: 2g  # Adjust the memory limit as needed
 
   flask_app:
     build:
@@ -20,7 +21,18 @@ services:
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
 
+  grobid:
+    image: lfoppiano/grobid:0.8.0
+    ports:
+      - "8070:8070"
+    mem_limit: 5g
+
 networks:
   default:
     external:
       name: imad
+
+
+
+
+    

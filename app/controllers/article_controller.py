@@ -12,12 +12,12 @@ from app import db
 from app import login_manager
 from elasticsearch import Elasticsearch, NotFoundError
 from app import es
+from grobid_client_python.example import JsonGenr
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
 
 #get article
 @jwt_required()
@@ -55,9 +55,8 @@ def get_article(article_id):
 @jwt_required()
 
 def add_article():
-    with open('jsonfile.json', 'r') as fichier:
-        data = json.load(fichier)
-   
+    data = json.load(JsonGenr())
+
     current_date = datetime.utcnow()  # Utilisez datetime.now() si vous préférez l'heure locale
 
     new_article = Article(
