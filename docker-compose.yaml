@@ -19,8 +19,18 @@ services:
       - elasticsearch
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
+  
+  node-app:
+    build:
+      context: ./node-app
+      dockerfile: Dockerfile   # Specify the correct Dockerfile name
+    ports:
+      - "3000:3000"
+    depends_on:
+      - elasticsearch
 
 networks:
   default:
     external:
-      name: imad
+      name: _sciverse
+
