@@ -1,8 +1,8 @@
-"""empty message
+"""Update models to fix relationships
 
-Revision ID: ebd0975160e7
+Revision ID: 730102b660b1
 Revises: 
-Create Date: 2023-12-26 15:03:39.741404
+Create Date: 2024-01-06 22:06:32.135129
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ebd0975160e7'
+revision = '730102b660b1'
 down_revision = None
 branch_labels = None
 depends_on = None
