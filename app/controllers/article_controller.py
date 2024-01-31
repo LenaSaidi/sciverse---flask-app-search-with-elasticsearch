@@ -1,4 +1,3 @@
-import json
 from flask import Flask, request, jsonify
 from flask_jwt_extended import current_user, get_jwt_identity
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
@@ -14,12 +13,11 @@ from elasticsearch import Elasticsearch, NotFoundError
 from app import es
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+
+    #------------------------------------ SQL  GET-------------------------------------
 
 
-#get article
+#get one article from sql
 @jwt_required()
 def get_article(article_id):
     article = Article.query.get(article_id)
@@ -51,13 +49,80 @@ def get_article(article_id):
     return jsonify({'article': article_data})
 
 
+
+#get articles with fav of a specific user
+@jwt_required()
+def get_articles():
+    try:
+        # Get the user ID from the JWT token
+        user_id = get_jwt_identity()
+
+        # Query the user
+        user = User.query.get(user_id)
+
+        # Query all articles with favorite information
+        articles = Article.query.all()
+
+        # Create a response containing articles with a boolean indicating if it's a favorite
+        response_articles = [
+            {
+                'id': article.id,
+                'title': article.title,
+                'abstract': article.abstract,
+                'full_text': article.full_text,
+                'pdf_url': article.pdf_url,
+                'is_favorite': article in user.favorite_articles,
+                'authors': [{'id': author.id, 'name': author.name, 'email': author.email} for author in article.authors],
+                'keywords': [{'id': keyword.id, 'keyword': keyword.keyword} for keyword in article.keywords],
+                'references': [{'id': reference.id, 'reference': reference.reference} for reference in article.references],
+                'date': article.date.isoformat()
+                
+
+            }
+            for article in articles
+        ]
+
+        return jsonify({'articles': response_articles}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+#get all articles from sql	
+@jwt_required()
+def get_all_articles():
+    try:
+        articles = Article.query.all()
+
+        response_articles = [
+            {
+                'id': article.id,
+                'title': article.title,
+                'abstract': article.abstract,
+                'full_text': article.full_text,
+                'pdf_url': article.pdf_url,
+                'authors': [{'id': author.id, 'name': author.name, 'email': author.email} for author in article.authors],
+                'keywords': [{'id': keyword.id, 'keyword': keyword.keyword} for keyword in article.keywords],
+                'references': [{'id': reference.id, 'reference': reference.reference} for reference in article.references],
+                'date': article.date.isoformat()
+            }
+            for article in articles
+        ]
+
+        return jsonify({'articles': response_articles}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+
+    #------------------------------------ ADD PUT DELETE-------------------------------------
+
 #add article
 @jwt_required()
 
 def add_article():
-    with open('jsonfile.json', 'r') as fichier:
-        data = json.load(fichier)
-   
+    data = request.json
     current_date = datetime.utcnow()  # Utilisez datetime.now() si vous préférez l'heure locale
 
     new_article = Article(
@@ -139,84 +204,10 @@ def add_article():
         db.session.rollback()
         return jsonify({'error': f"Failed to add the article to the database: {str(db_error)}"}), 500
 
-#get articles with fav of a specific user
-@jwt_required()
-def get_articles():
-    try:
-        # Get the user ID from the JWT token
-        user_id = get_jwt_identity()
 
-        # Query the user
-        user = User.query.get(user_id)
-
-        # Query all articles with favorite information
-        articles = Article.query.all()
-
-        # Create a response containing articles with a boolean indicating if it's a favorite
-        response_articles = [
-            {
-                'id': article.id,
-                'title': article.title,
-                'content': article.content,
-               'is_favorite': article in user.favorite_articles
-            }
-            for article in articles
-        ]
-
-        return jsonify({'articles': response_articles}), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
     
 
-#get all articles of db without fav
-@jwt_required()
-def get_all_articles():
-    # Récupérer tous les articles depuis la base de données
-    articles = Article.query.all()
 
-    articles_list = []
-    for article in articles:
-        # Liste pour stocker les données des auteurs associés à l'article
-        auteurs_list = []
-        
-        # Parcourir la relation ArticleAuteur pour obtenir les auteurs de l'article
-        for article_auteur_relation in article.authors:
-            author = article_auteur_relation  # Ici, il n'est pas nécessaire d'obtenir l'objet Auteur à partir de la relation, car elle est directe
-            auteur_data = {
-                'name': author.name,
-                'email': author.email,
-                'institutions': [{"institution_name": institution.institution_name} for institution in author.institutions]
-            }
-            auteurs_list.append(auteur_data)
-
-        # Récupérer les mots-clés associés à l'article
-        keywords = [keyword.keyword for keyword in article.keywords]
-
-        # Récupérer les références associées à l'article
-        references_list = [ref.reference for ref in article.references]
-
-        # Construire la réponse pour un article
-        article_data = {
-            'id': article.id,
-            'title': article.title,
-            'abstract': article.abstract,
-            'full_text': article.full_text,
-            'pdf_url': article.pdf_url,
-            'date': article.date,
-            'keywords': keywords,
-            'authors': auteurs_list,
-            'references': references_list
-        }
-
-        articles_list.append(article_data)
-
-    # Retourner la liste des articles en format JSON
-    return jsonify({'articles': articles_list})
-
-
-
-# Edit Article
 
 @jwt_required()
 def edit_article(article_id):
@@ -226,7 +217,6 @@ def edit_article(article_id):
         return jsonify({'error': 'Article not found'}), 404
     
     current_user_id = get_jwt_identity()
-
 
     if request.method == 'PUT':
         # Update the article fields
@@ -277,6 +267,24 @@ def edit_article(article_id):
         # Save the updated article
         db.session.commit()
 
+        # Update the corresponding Elasticsearch index
+        try:
+            es.update(index='articles_index', id=article.elasticsearch_mapping[0].elasticsearch_id, body={
+                "doc": {
+                    "title": article.title,
+                    "abstract": article.abstract,
+                    "full_text": article.full_text,
+                    "keywords": [keyword.keyword for keyword in article.keywords],
+                    "pdf_url": article.pdf_url,
+                    "references": [reference.reference for reference in article.references],
+                    "date": article.date.strftime('%Y-%m-%dT%H:%M:%SZ'),  # Format date as per Elasticsearch
+                    "authors": [{"name": author.name, "email": author.email} for author in article.authors],
+                    "institution_names": [inst.institution_name for author in article.authors for inst in author.institutions]
+                }
+            })
+        except Exception as es_error:
+            return jsonify({"error": f"Failed to update the article in Elasticsearch: {str(es_error)}"}), 500
+
         # Create a new ArticleEdit record
         edit = ArticleEdit(
             article_id=article.id,
@@ -287,6 +295,8 @@ def edit_article(article_id):
         db.session.commit()
 
         return jsonify({'message': 'Article edited successfully'})
+
+
 
 
 #delete article 
@@ -308,6 +318,47 @@ def delete_article(article_id):
         return jsonify({'error': str(e)}), 500
     
 
+
+
+
+
+    #------------------------------------ EDITS ARTICLE-------------------------------------
+
+
+@jwt_required()
+def get_article_edits(article_id):
+    article = Article.query.get(article_id)
+
+    if not article:
+        return jsonify({'error': 'Article not found'}), 404
+
+    # Get all edits associated with the article
+    edits = ArticleEdit.query.filter_by(article_id=article.id).all()
+
+    # Format edits data
+    edits_data = []
+    for edit in edits:
+        edit_data = {
+            'id': edit.id,
+            'user_id': edit.user_id,
+            'edited_at': edit.edited_at.isoformat(),
+        }
+        edits_data.append(edit_data)
+
+    return jsonify({'edits': edits_data})
+    
+
+
+
+
+
+
+
+    #------------------------------------ ELASTIC SEARCH GET-------------------------------------
+
+
+
+#get one article from elastic search
 @jwt_required()
 def get_article_from_elasticsearch(article_id):
     try:
@@ -345,26 +396,64 @@ def get_article_from_elasticsearch(article_id):
 
     except Exception as e:
         return jsonify({'error': f'Error retrieving article: {str(e)}'}), 500
+    
 
 @jwt_required()
-def get_article_edits(article_id):
-    article = Article.query.get(article_id)
+def get_all_articles_from_elasticsearch():
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
 
-    if not article:
-        return jsonify({'error': 'Article not found'}), 404
+        # Get IDs of favorite articles for the user
+        favorite_article_ids = {article.id for article in user.favorite_articles}
 
-    # Get all edits associated with the article
-    edits = ArticleEdit.query.filter_by(article_id=article.id).all()
+        # Initialize variables for pagination
+        page_size = 10  # Adjust as needed
+        current_page = 1
+        total_hits = float('inf')
+        formatted_response = []
 
-    # Format edits data
-    edits_data = []
-    for edit in edits:
-        edit_data = {
-            'id': edit.id,
-            'user_id': edit.user_id,
-            'edited_at': edit.edited_at.isoformat(),
-        }
-        edits_data.append(edit_data)
+        while len(formatted_response) < total_hits:
+            # Search documents in the Elasticsearch index with pagination
+            response = es.search(index="articles_index", body={"query": {"match_all": {}}, "size": page_size, "from": (current_page - 1) * page_size})
+            hits = response['hits']['hits']
+            total_hits = response['hits']['total']['value']
 
-    return jsonify({'edits': edits_data})
-    
+            # Format the response with favorite status and article IDs
+            for hit in hits:
+                es_id = hit['_id']
+                db_id = get_db_article_id(es_id)
+                is_favorite = db_id in favorite_article_ids
+                article_data = {
+                    'es_id': es_id,
+                    'db_id': db_id,
+                    'is_favorite': is_favorite,
+                    'title': hit['_source']['title'],
+                    'abstract': hit['_source']['abstract'],
+                    'full_text': hit['_source']['full_text'],
+                    'keywords': hit['_source']['keywords'],
+                    'pdf_url': hit['_source']['pdf_url'],
+                    'references': hit['_source']['references'],
+                    'date': hit['_source']['date'],
+                    'authors': hit['_source']['authors'],
+                    'institution_names': hit['_source']['institution_names']
+                }
+                formatted_response.append(article_data)
+
+            # Move to the next page
+            current_page += 1
+
+        return jsonify({'articles': formatted_response}), 200
+
+    except Exception as e:
+        return jsonify({'error': f'Error retrieving articles: {str(e)}'}), 500
+
+def get_db_article_id(es_id):
+    # Implement logic to retrieve article ID from your database based on Elasticsearch ID
+    # This could involve querying your database or using a mapping between Elasticsearch and database IDs
+    # For simplicity, let's assume a direct mapping for now
+    mapping_entry = ArticleElasticsearchMapping.query.filter_by(elasticsearch_id=es_id).first()
+    if mapping_entry:
+        return mapping_entry.article_id
+    else:
+        return None

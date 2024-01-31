@@ -13,6 +13,7 @@ from app.controllers import article_controller
 from app.controllers import favorite_controller
 
 
+
 # auth related routes
 app.add_url_rule('/signup', 'signup', auth_controller.signup, methods=['POST'])
 app.add_url_rule('/signin', 'signin', auth_controller.signin, methods=['POST'])
@@ -33,19 +34,32 @@ app.add_url_rule('/moderator/create', 'create_moderator', moderator_controller.c
 app.add_url_rule('/admins', 'get_admins', admin_controller.get_admins, methods=['GET'])
 app.add_url_rule('/admin/create', 'create_admin', admin_controller.create_admin, methods=['POST'])
 
-# Article-related routes
-app.add_url_rule('/article/getStatic/<int:article_id>', 'get_article', article_controller.get_article, methods=['GET'])
+# Article GET related routes in sqlite
+
+app.add_url_rule('/article/get/<int:article_id>', 'get_article', article_controller.get_article, methods=['GET'])
+app.add_url_rule('/articles', 'get_fav_articles', article_controller.get_articles, methods=['GET']) #get articles with fav
+
+app.add_url_rule('/all-articles', 'get_all_articles', article_controller.get_all_articles, methods=['GET']) #to test
+
+# Article GET related routes in elasticsearch
+app.add_url_rule('/article/get-es/<int:article_id>', 'get_article_from_elasticsearch', article_controller.get_article_from_elasticsearch, methods=['GET'])
+app.add_url_rule('/articles-es', 'get_all_articles_from_elasticsearch', article_controller.get_all_articles_from_elasticsearch, methods=['GET'])
+
+
+# Article ADD/PUT/DELETE related routes in sqlite and elasticsearch
 app.add_url_rule('/article/add', 'add_article', article_controller.add_article, methods=['POST'])
-app.add_url_rule('/articles', 'get_articles', article_controller.get_articles, methods=['GET'])
-app.add_url_rule('/all-articles', 'get_all_articles', article_controller.get_all_articles, methods=['GET'])
 app.add_url_rule('/article/edit/<int:article_id>', 'edit_article', article_controller.edit_article, methods=['PUT'])
 app.add_url_rule('/article/delete/<int:article_id>', 'delete_article', article_controller.delete_article, methods=['DELETE'])
-app.add_url_rule('/article/edits/<int:article_id>', 'get_article_edits', article_controller.get_article_edits, methods=['GET'])
+
+
+# Search-related routes and article
 app.add_url_rule('/search-article', 'search_article', search_article, methods=['POST'])
-app.add_url_rule('/article/get/<int:article_id>', 'get_article_from_elasticsearch', article_controller.get_article_from_elasticsearch, methods=['GET'])
+
+
+#edits article
+app.add_url_rule('/article/edits/<int:article_id>', 'get_article_edits', article_controller.get_article_edits, methods=['GET'])
 
 # Fav_articles-related routes
-
 app.add_url_rule('/favorite_articles/get', 'get_favorite_articles', favorite_controller.get_favorite_articles, methods=['GET'])
 app.add_url_rule('/favorites/add/<int:article_id>', 'add_to_favorites', favorite_controller.add_to_favorites, methods=['POST'])
 app.add_url_rule('/favorites/remove/<int:article_id>', 'remove_from_favorites', favorite_controller.remove_from_favorites, methods=['DELETE'])

@@ -5,10 +5,12 @@ from elasticsearch import Elasticsearch
 from flask import Flask
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
-
+import mysql.connector
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
+from datetime import timedelta
+from flask_jwt_extended import create_access_token
 
 
 app = Flask(__name__)
@@ -31,19 +33,10 @@ migrate = Migrate()
 migrate.init_app(app, db)
 es = Elasticsearch(['http://localhost:9200'])
 
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 
 
-# # MySQL Connector initialization
-# mysql_connection = mysql.connector.connect(
-#     host="127.0.0.1",
-#     user="root",
-#     password="@sciverse2023@",
-#     database="sciverse",
-#     port=3306
-# )
 
-# Create a cursor for executing SQL queries
-# mysql_cursor = mysql_connection.cursor()
 
 
 # Import routes and controllers
