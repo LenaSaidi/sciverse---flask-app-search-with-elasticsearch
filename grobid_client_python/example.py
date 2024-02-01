@@ -1,15 +1,8 @@
-from grobid_client_python.grobid_client.grobid_client import GrobidClient
+import os
 import xml.etree.ElementTree as ET
-import json
 
-def JsonGenr():
-    client = GrobidClient(config_path="./config.json")
-    client.process("processFulltextDocument", "./tests/test_pdf", output="./tests/test_out/", consolidate_citations=False, tei_coordinates=True, force=False)
-
-    def parse_xml(xml_path):
-        tree = ET.parse(xml_path)
-        root = tree.getroot()
-        return root
+def parse_xml_to_json(xml_content):
+    root = ET.fromstring(xml_content)
 
     def extract_authors(element):
         authors = []
@@ -17,7 +10,6 @@ def JsonGenr():
             name = author_element.findtext('tei:persName/tei:surname', '', namespaces={'tei': 'http://www.tei-c.org/ns/1.0'})
             email = author_element.findtext('tei:email', '', namespaces={'tei': 'http://www.tei-c.org/ns/1.0'})
 
-            # Only include authors with both name and email
             if name and email:
                 author_data = {
                     'name': name,
@@ -45,26 +37,31 @@ def JsonGenr():
     def extract_abstract(element):
         return ' '.join(paragraph.text for paragraph in element.findall('.//tei:abstract/tei:div/tei:p', namespaces={'tei': 'http://www.tei-c.org/ns/1.0'}))
 
-    def parse_xml_to_json(xml_path, json_path):
-        root = parse_xml(xml_path)
+    data = {
+        'title': root.findtext('.//tei:titleStmt/tei:title[@type="main"]', '', namespaces={'tei': 'http://www.tei-c.org/ns/1.0'}),
+        'abstract': extract_abstract(root),
+        'authors': extract_authors(root),
+        'keywords': extract_keywords(root),
+        'references': extract_references(root),
+        'full_text': extract_full_text(root),
+    }
 
-        data = {
-            'title': root.findtext('.//tei:titleStmt/tei:title[@type="main"]', '', namespaces={'tei': 'http://www.tei-c.org/ns/1.0'}),
-            'abstract': extract_abstract(root),
-            'authors': extract_authors(root),
-            'keywords': extract_keywords(root),
-            'references': extract_references(root),
-            'full_text': extract_full_text(root),
-        }
+    return data
 
-        with open(json_path, 'w') as json_file:
-            json.dump(data, json_file, indent=2)
+def JsonGenr(pdf_path, xml_path):
+    with open(xml_path, 'r', encoding='utf-8') as xml_file:
+        xml_content = xml_file.read()
 
-    # Example usage:
-    xml_path = r'D:\igl_project\sciverse---flask-app-search-with-elasticsearch\grobid_client_python\tests\test_out\test.grobid.tei.xml'
-    json_path = r'D:\igl_project\sciverse---flask-app-search-with-elasticsearch\grobid_client_python\tests\test_out\Jsonfile.json'
-    parse_xml_to_json(xml_path, json_path)
+    json_data = parse_xml_to_json(xml_content)
+    os.remove(xml_path)
+
+    return json_data
 
 # Call the method
 if __name__ == "__main__":
-    JsonGenr()
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    pdf_path = os.path.join(current_dir, 'grobid_client_python/tests/test_pdf/test.pdf')  
+    xml_path = os.path.join(current_dir, 'tests', 'test_out', 'test.grobid.tei.xml')
+
+    json_data = JsonGenr(pdf_path, xml_path)
+    print(json_data)

@@ -71,8 +71,17 @@ def signin():
 
         if user and check_password_hash(user.password_hash, password):
             # Create a JWT
-            access_token = create_access_token(identity=user.user_id)  
-            return jsonify(access_token=access_token), 200
+            access_token = create_access_token(identity=user.user_id) 
+            response = {
+                'access_token': access_token,
+                    'user_id': user.user_id,
+                    'email': user.email,
+                    'firstName': user.firstName,
+                    'lastName': user.lastName,
+                    'role': user.role,
+                    #'favorite_articles': user.favorite_articles
+            } 
+            return jsonify(response), 400
         else:
             return jsonify({"msg": "Invalid email or password"}), 401
 

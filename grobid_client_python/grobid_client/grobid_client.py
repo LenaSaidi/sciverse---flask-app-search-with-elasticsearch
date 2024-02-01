@@ -51,7 +51,7 @@ class GrobidClient(ApiClient):
         if check_server:
             self._test_server_connection()
 
-    def _load_config(self, path="./config.json"):
+    def _load_config(self, path="/app/grobid_client_python/config.json"):
         """
         Load the json configuration
         """
