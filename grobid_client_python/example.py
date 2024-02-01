@@ -1,14 +1,15 @@
 from grobid_client.grobid_client import GrobidClient
 import xml.etree.ElementTree as ET
 import json
+import os
 
-def JsonGenr():
+def JsonGenr(pdf_path):
+        # pdf_path='./tests/test_pdf'
     client = GrobidClient(config_path="./config.json")
-    client.process("processFulltextDocument", "./tests/test_pdf", output="./tests/test_out/", consolidate_citations=False, tei_coordinates=True, force=False)
+    client.process("processFulltextDocument", pdf_path, output="./tests/test_out/", consolidate_citations=False, tei_coordinates=True, force=False)
 
-    def parse_xml(xml_path):
-        tree = ET.parse(xml_path)
-        root = tree.getroot()
+    def parse_xml_content(xml_content):
+        root = ET.fromstring(xml_content)
         return root
 
     def extract_authors(element):
@@ -45,8 +46,8 @@ def JsonGenr():
     def extract_abstract(element):
         return ' '.join(paragraph.text for paragraph in element.findall('.//tei:abstract/tei:div/tei:p', namespaces={'tei': 'http://www.tei-c.org/ns/1.0'}))
 
-    def parse_xml_to_json(xml_path, json_path):
-        root = parse_xml(xml_path)
+    def parse_xml_to_json(xml_content):
+        root = parse_xml_content(xml_content)
 
         data = {
             'title': root.findtext('.//tei:titleStmt/tei:title[@type="main"]', '', namespaces={'tei': 'http://www.tei-c.org/ns/1.0'}),
@@ -57,14 +58,21 @@ def JsonGenr():
             'full_text': extract_full_text(root),
         }
 
-        with open(json_path, 'w') as json_file:
-            json.dump(data, json_file, indent=2)
+        return data
 
     # Example usage:
     xml_path = r'D:\igl_project\sciverse---flask-app-search-with-elasticsearch\grobid_client_python\tests\test_out\test.grobid.tei.xml'
-    json_path = r'D:\igl_project\sciverse---flask-app-search-with-elasticsearch\grobid_client_python\tests\test_out\Jsonfile.json'
-    parse_xml_to_json(xml_path, json_path)
+
+    with open(xml_path, 'r', encoding='utf-8') as xml_file:
+        xml_content = xml_file.read()
+
+    json_data = parse_xml_to_json(xml_content)
+    os.remove(xml_path)
+
+    return json_data
 
 # Call the method
 if __name__ == "__main__":
-    JsonGenr()
+    pdf_path='./tests/test_pdf'
+    json_data = JsonGenr(pdf_path)
+    print(json_data)
