@@ -58,26 +58,25 @@ def search_article():
 
         hits = response['hits']['hits']
 
-        if hits:
-            articles_data = []
-            for hit in hits:
-                article_source = hit['_source']
-                article_id = hit['_id']
-                # Fetch article ID from your database
-                db_article_id = get_db_article_id(article_id)
-                if db_article_id:
-                    # Check if the article is a favorite
-                    is_favorite = db_article_id in favorite_article_ids
-                    article_data = {
-                        'db_id': db_article_id,
-                        'es_id': article_id,
-                        'is_favorite': is_favorite,
-                        **article_source
-                    }
-                    articles_data.append(article_data)
-            return jsonify({"articles": articles_data}), 200
-        else:
-            return jsonify({"message": "No articles found matching the specified criteria."}), 404
+        articles_data = []
+        for hit in hits:
+            article_source = hit['_source']
+            article_id = hit['_id']
+            # Fetch article ID from your database
+            db_article_id = get_db_article_id(article_id)
+            if db_article_id:
+                # Check if the article is a favorite
+                is_favorite = db_article_id in favorite_article_ids
+                article_data = {
+                    'id': db_article_id,
+                    'es_id': article_id,
+                    'is_favorite': is_favorite,
+                    **article_source
+                }
+                articles_data.append(article_data)
+
+        return jsonify({"articles": articles_data}), 200
+
     except Exception as e:
         return jsonify({"error": f"Search failed: {str(e)}"}), 500
 
