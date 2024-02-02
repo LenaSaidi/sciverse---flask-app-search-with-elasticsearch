@@ -7,12 +7,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import ForeignKey
+from JsonFrm import Json_ret
 from app.models import *
 from app import db
 from app import login_manager
 from elasticsearch import Elasticsearch, NotFoundError
 from app import es
-# from grobid_client_python.example import JsonGenr
 
 
 @login_manager.user_loader
@@ -55,7 +55,7 @@ def get_article(article_id):
 @jwt_required()
 
 def add_article():
-    # data = json.load(JsonGenr())
+    data = Json_ret("pdf_bib/test.pdf")
 
     current_date = datetime.utcnow()  # Utilisez datetime.now() si vous préférez l'heure locale
 

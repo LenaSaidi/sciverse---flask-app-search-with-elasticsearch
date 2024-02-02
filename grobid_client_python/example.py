@@ -1,4 +1,4 @@
-from grobid_client.grobid_client import GrobidClient
+from grobid_client_python.grobid_client.grobid_client import GrobidClient
 import xml.etree.ElementTree as ET
 import json
 import os
