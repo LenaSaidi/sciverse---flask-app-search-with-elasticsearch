@@ -10,10 +10,7 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
 from datetime import timedelta
-import os
 from flask_jwt_extended import create_access_token
-from werkzeug.utils import secure_filename
-from grobid_client import grobid_client
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sciverse'
@@ -23,6 +20,8 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'  # Set the login view
 
 jwt = JWTManager(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:sciversebdd@127.0.0.1:3306/sciverse' 
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:sciverse2023@127.0.0.1:3306/sciverse'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sciversedb.db'
 
 

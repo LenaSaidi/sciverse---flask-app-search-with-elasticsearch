@@ -48,64 +48,8 @@ def get_article(article_id):
 
     return jsonify({'article': article_data})
 
-# #get articles with fav of a specific user
-# # Get articles from SQL
-# @jwt_required()
-# def get_articles():
-#     try:
-#         # Get the user ID from the JWT token
-#         user_id = get_jwt_identity()
-
-#         # Query the user
-#         user = User.query.get(user_id)
-
-#         # Query all articles with favorite information
-#         articles = Article.query.all()
-
-#         response_articles = []
-#         for article in articles:
-#             response_article = {
-#                 'id': article.id,
-#                 'title': article.title,
-#                 'abstract': article.abstract,
-#                 'full_text': article.full_text,
-#                 'pdf_url': article.pdf_url,
-#                 'authors': [],
-#                 'keywords': [],
-#                 'references': [],
-#                 'is_favorite': article in user.favorite_articles,
-#                 'date': article.date.isoformat()
-#             }
-
-#             for author in article.authors:
-#                 author_data = {
-#                     'id': author.id,
-#                     'name': author.name,
-#                     'email': author.email,
-#                     'institutions': [{'institution_name': institution.institution_name} for institution in author.institutions]
-#                 }
-#                 response_article['authors'].append(author_data)
-
-#             for keyword in article.keywords:
-#                 keyword_data = {
-#                     'id': keyword.id,
-#                     'keyword': keyword.keyword
-#                 }
-#                 response_article['keywords'].append(keyword_data)
-
-#             for reference in article.references:
-#                 reference_data = {
-#                     'id': reference.id,
-#                     'reference': reference.reference
-#                 }
-#                 response_article['references'].append(reference_data)
-
-#             response_articles.append(response_article)
-
-#         return jsonify({'articles': response_articles}), 200
-
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
+# get articles with fav of a specific user
+# Get articles from SQL
 
 @jwt_required()
 def get_articles():
