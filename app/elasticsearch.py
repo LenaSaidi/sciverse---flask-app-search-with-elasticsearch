@@ -68,7 +68,7 @@ def search_article():
                 # Check if the article is a favorite
                 is_favorite = db_article_id in favorite_article_ids
                 article_data = {
-                    'db_id': db_article_id,
+                    'id': db_article_id,
                     'es_id': article_id,
                     'is_favorite': is_favorite,
                     **article_source

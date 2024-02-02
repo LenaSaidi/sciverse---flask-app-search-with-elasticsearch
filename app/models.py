@@ -55,7 +55,6 @@ class BibliographicReference(db.Model):
     __tablename__ = 'bibliographic_references'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     reference = db.Column(db.String(1000))
-
 # Junction Tables
 
 class AuthorInstitution(db.Model):

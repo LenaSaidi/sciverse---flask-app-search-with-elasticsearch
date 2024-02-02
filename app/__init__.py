@@ -12,6 +12,7 @@ from flask_jwt_extended import jwt_required, unset_jwt_cookies
 from datetime import timedelta
 from flask_jwt_extended import create_access_token
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sciverse'
 
@@ -20,6 +21,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'  # Set the login view
 
 jwt = JWTManager(app)
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:sciversebdd@127.0.0.1:3306/sciverse' 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:sciverse2023@127.0.0.1:3306/sciverse'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sciversedb.db'
@@ -32,24 +34,10 @@ migrate = Migrate()
 migrate.init_app(app, db)
 es = Elasticsearch(['http://localhost:9200'])
 
-# Define upload folder
-# UPLOAD_FOLDER = 'uploads'
-# ALLOWED_EXTENSIONS = {'pdf'}
-# app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'your_app', UPLOAD_FOLDER)
-
-# # Configure GROBID client
-# grobid = grobid_client.GrobidClient('localhost', 8070, '/api/processFulltextDocument')
-
-
-# app.register_blueprint(bp)
-
-
-app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=1)
-
-
 
 CORS(app)
 
+
 # Import routes and controllers
-from app.controllers import user_controller, article_controller
+from app.controllers import user_controller, article_controller, moderator_controller
 from app import routes  # Import at the end to avoid circular import

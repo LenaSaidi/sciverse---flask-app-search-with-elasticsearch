@@ -35,11 +35,15 @@ def signup():
 
         # Validate email format
         if not is_valid_email(email):
-            return jsonify({'message': 'Invalid email format.'}), 400
+            return jsonify({'error': 'Invalid email format.'}), 400
 
         # Check if the email is already in use
         if User.query.filter_by(email=email).first():
-            return jsonify({'message': 'Email address already in use. Please use a different email.'}), 400
+            return jsonify({'error': 'Email address already in use. Please use a different email.'}), 400
+
+        # Validate password strength
+        if not is_strong_password(password):
+            return jsonify({'error': 'Password should be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.'}), 400
 
         # Validate password strength
         if not is_strong_password(password):
@@ -76,20 +80,20 @@ def signup():
 
         return jsonify({'message': 'Account created successfully. You can now login.', 'user': user_data}), 201
 
-    return jsonify({'message': 'Signup endpoint. Please use POST method to signup.'}), 405  # Method Not Allowed
+    return jsonify({'error': 'Signup endpoint. Please use POST method to signup.'}), 405  # Method Not Allowed
 
 # Signin endpoint (POST)
 def signin():
     if request.method == 'POST':
         if not request.is_json:
-            return jsonify({"msg": "Missing JSON in request"}), 400
+            return jsonify({"error": "Missing JSON in request"}), 400
 
         email = request.json.get('email', None)
         password = request.json.get('password', None)
 
         # Check if email and password are provided
         if not email or not password:
-            return jsonify({"msg": "Email and password are required"}), 400
+            return jsonify({"error": "Email and password are required"}), 400
 
         # Check if the user exists
         user = User.query.filter_by(email=email).first()
@@ -113,9 +117,9 @@ def signin():
             # Return the access token and user information in the response
             return jsonify({'access_token': access_token, 'user': user_info}), 200
         else:
-            return jsonify({"msg": "Invalid email or password"}), 401
+            return jsonify({"error": "Invalid email or password"}), 401
 
-    return jsonify({'message': 'Signin endpoint. Please use POST method to signin.'})
+    return jsonify({'error': 'Signin endpoint. Please use POST method to signin.'})
 
 
 # Signout endpoint (POST)
@@ -131,6 +135,5 @@ def protected():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
-
 
 

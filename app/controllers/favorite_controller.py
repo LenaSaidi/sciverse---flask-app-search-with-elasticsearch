@@ -115,6 +115,7 @@ def get_favorite_articles():
                 'abstract': article.abstract,
                 'full_text': article.full_text,
                 'pdf_url': article.pdf_url,
+                'is_favorite': True,
                 'authors': [],
                 'keywords': [],
                 'references': [],

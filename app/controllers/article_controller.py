@@ -51,6 +51,9 @@ def get_article(article_id):
 # get articles with fav of a specific user
 # Get articles from SQL
 
+
+#get articles with fav of a specific user
+# Get articles from SQL
 @jwt_required()
 def get_articles():
     try:
@@ -108,8 +111,6 @@ def get_articles():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-
 
 
 #get all articles from sql	
@@ -240,8 +241,6 @@ def add_article():
         # Si la mise à jour de la base de données échoue, renvoyez une erreur appropriée
         db.session.rollback()
         return jsonify({'error': f"Failed to add the article to the database: {str(db_error)}"}), 500
-
-
     
 
 
