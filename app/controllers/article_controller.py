@@ -48,9 +48,65 @@ def get_article(article_id):
 
     return jsonify({'article': article_data})
 
+# #get articles with fav of a specific user
+# # Get articles from SQL
+# @jwt_required()
+# def get_articles():
+#     try:
+#         # Get the user ID from the JWT token
+#         user_id = get_jwt_identity()
 
+#         # Query the user
+#         user = User.query.get(user_id)
 
-#get articles with fav of a specific user
+#         # Query all articles with favorite information
+#         articles = Article.query.all()
+
+#         response_articles = []
+#         for article in articles:
+#             response_article = {
+#                 'id': article.id,
+#                 'title': article.title,
+#                 'abstract': article.abstract,
+#                 'full_text': article.full_text,
+#                 'pdf_url': article.pdf_url,
+#                 'authors': [],
+#                 'keywords': [],
+#                 'references': [],
+#                 'is_favorite': article in user.favorite_articles,
+#                 'date': article.date.isoformat()
+#             }
+
+#             for author in article.authors:
+#                 author_data = {
+#                     'id': author.id,
+#                     'name': author.name,
+#                     'email': author.email,
+#                     'institutions': [{'institution_name': institution.institution_name} for institution in author.institutions]
+#                 }
+#                 response_article['authors'].append(author_data)
+
+#             for keyword in article.keywords:
+#                 keyword_data = {
+#                     'id': keyword.id,
+#                     'keyword': keyword.keyword
+#                 }
+#                 response_article['keywords'].append(keyword_data)
+
+#             for reference in article.references:
+#                 reference_data = {
+#                     'id': reference.id,
+#                     'reference': reference.reference
+#                 }
+#                 response_article['references'].append(reference_data)
+
+#             response_articles.append(response_article)
+
+#         return jsonify({'articles': response_articles}), 200
+
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+
 @jwt_required()
 def get_articles():
     try:
@@ -63,30 +119,54 @@ def get_articles():
         # Query all articles with favorite information
         articles = Article.query.all()
 
-        # Create a response containing articles with a boolean indicating if it's a favorite
-        response_articles = [
-            {
+        response_articles = []
+        for article in articles:
+            response_article = {
                 'id': article.id,
                 'title': article.title,
                 'abstract': article.abstract,
                 'full_text': article.full_text,
                 'pdf_url': article.pdf_url,
+                'authors': [],
+                'keywords': [],
+                'references': [],
                 'is_favorite': article in user.favorite_articles,
-                'authors': [{'id': author.id, 'name': author.name, 'email': author.email} for author in article.authors],
-                'keywords': [{'id': keyword.id, 'keyword': keyword.keyword} for keyword in article.keywords],
-                'references': [{'id': reference.id, 'reference': reference.reference} for reference in article.references],
                 'date': article.date.isoformat()
-                
-
             }
-            for article in articles
-        ]
+
+            # Check if keywords are stored as strings or Keyword model instances
+            if isinstance(article.keywords[0], Keyword):
+                # Extract keyword strings from Keyword model instances
+                response_article['keywords'] = [keyword.keyword for keyword in article.keywords]
+            else:
+                # Keywords are already stored as strings
+                response_article['keywords'] = article.keywords
+
+            for author in article.authors:
+                author_data = {
+                    'id': author.id,
+                    'name': author.name,
+                    'email': author.email,
+                    'institutions': [{'institution_name': institution.institution_name} for institution in author.institutions]
+                }
+                response_article['authors'].append(author_data)
+
+            for reference in article.references:
+                reference_data = {
+                    'id': reference.id,
+                    'reference': reference.reference
+                }
+                response_article['references'].append(reference_data)
+
+            response_articles.append(response_article)
 
         return jsonify({'articles': response_articles}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
+
+
 
 #get all articles from sql	
 @jwt_required()
@@ -117,44 +197,57 @@ def get_all_articles():
 
 
     #------------------------------------ ADD PUT DELETE-------------------------------------
-
 #add article
 @jwt_required()
-
 def add_article():
     data = request.json
-    current_date = datetime.utcnow()  # Utilisez datetime.now() si vous préférez l'heure locale
+
+    # Check if all required fields are present in the request data
+    required_fields = ['title', 'abstract', 'full_text', 'authors', 'keywords', 'references']
+    missing_fields = [field for field in required_fields if field not in data]
+    if missing_fields:
+        return jsonify({'error': f"Missing required fields: {', '.join(missing_fields)}"}), 400
+    
+    current_date = datetime.utcnow()  # Utilize datetime.now() if you prefer the local time
 
     new_article = Article(
-        title=data.get('title'),
-        abstract=data.get('abstract'),
-        full_text=data.get('full_text'),
-        pdf_url=data.get('pdf_url'),
+        title=data['title'],
+        abstract=data['abstract'],
+        full_text=data['full_text'],
+        pdf_url=data.get('pdf_url'),  # optional field
         date=current_date
     )
     db.session.add(new_article)
     db.session.flush()
 
-    for author_data in data.get('authors', []):
+    # Add authors and their institutions
+    for author_data in data['authors']:
         author = Author(
-            name=author_data.get('name'),
-            email=author_data.get('email')
+            name=author_data['name'],
+            email=author_data['email']
         )
         db.session.add(author)
         db.session.flush()
 
-        relation = ArticleAuthor(article_id=new_article.id, author_id=author.id)
-        db.session.add(relation)
+        # Check if author has institutions specified
+        if 'institutions' not in author_data or not author_data['institutions']:
+            db.session.rollback()
+            return jsonify({'error': "Each author must have at least one institution specified"}), 400
 
-        for institution_data in author_data.get('institutions', []):
-            institution = Institution(institution_name=institution_data.get('institution_name'))
+        for institution_info in author_data['institutions']:
+            institution = Institution(institution_name=institution_info['institution_name'])
             db.session.add(institution)
             db.session.flush()
 
             author_institution = AuthorInstitution(author_id=author.id, institution_id=institution.id)
             db.session.add(author_institution)
 
-    for keyword_data in data.get('keywords', []):
+        # Create relation between article and author
+        relation = ArticleAuthor(article_id=new_article.id, author_id=author.id)
+        db.session.add(relation)
+
+    # Add keywords
+    for keyword_data in data['keywords']:
         keyword = Keyword(keyword=keyword_data)
         db.session.add(keyword)
         db.session.flush()
@@ -162,7 +255,8 @@ def add_article():
         relation = ArticleKeyword(article_id=new_article.id, keyword_id=keyword.id)
         db.session.add(relation)
 
-    for reference_data in data.get('references', []):
+    # Add references
+    for reference_data in data['references']:
         reference = BibliographicReference(reference=reference_data)
         db.session.add(reference)
         db.session.flush()
@@ -172,8 +266,7 @@ def add_article():
 
     try:
         db.session.commit()
-        
-        # Si la base de données est mise à jour avec succès, essayez d'indexer l'article dans Elasticsearch
+                # Si la base de données est mise à jour avec succès, essayez d'indexer l'article dans Elasticsearch
         try:
             response = es.index(index='articles_index', body={
                 "title": data.get('title', ''),

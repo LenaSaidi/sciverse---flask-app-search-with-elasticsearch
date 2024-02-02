@@ -12,21 +12,20 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     password_hash = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
-    firstName = db.Column(db.String(100))
-    lastName = db.Column(db.String(100))
-    nature = db.Column(db.Text)
+    firstName = db.Column(db.String(100), nullable=False)
+    lastName = db.Column(db.String(100), nullable=False)
+    nature = db.Column(db.Text, nullable=False)
     role = db.Column(db.String(50), default='user')  # Default role is 'user'
-    #favorite_articles = db.relationship('FavoriteArticle', backref='user', lazy='dynamic')
-    # article_edits = db.relationship('ArticleEdit', backref='user', lazy='dynamic')
+    field = db.Column(db.String(50), nullable=False)
     favorite_articles = db.relationship('Article', secondary='favorite_articles', backref='users')
     
 
 class Article(db.Model):
     __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255))
-    abstract = db.Column(db.Text)
-    full_text = db.Column(db.Text)
+    title = db.Column(db.String(255), nullable=False)
+    abstract = db.Column(db.Text, nullable=False)
+    full_text = db.Column(db.Text, nullable=False)
     pdf_url = db.Column(db.String(1000))
     date = db.Column(db.DateTime, default=datetime.utcnow)
     authors = db.relationship('Author', secondary='article_author', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
@@ -34,13 +33,12 @@ class Article(db.Model):
     references = db.relationship('BibliographicReference', secondary='article_reference', backref=db.backref('articles', lazy='dynamic'), cascade="all, delete")
     article_edits = db.relationship('ArticleEdit', backref='article', lazy='dynamic', cascade="all, delete")
     article_elasticsearch_mapping = db.relationship('ArticleElasticsearchMapping', backref='article', lazy='dynamic', cascade="all, delete")
-    #favorited_by = db.relationship('User', secondary='favorite_articles', backref='favorite_articles', cascade="all, delete")
 
 class Author(db.Model):
     __tablename__ = 'authors'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    email = db.Column(db.String(255))
+    name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
     institutions = db.relationship('Institution', secondary='author_institution', backref=db.backref('authors', lazy='dynamic'))
 
 class Institution(db.Model):
@@ -51,11 +49,11 @@ class Institution(db.Model):
 class Keyword(db.Model):
     __tablename__ = 'keywords'
     id = db.Column(db.Integer, primary_key=True)
-    keyword = db.Column(db.String(255))
+    keyword = db.Column(db.String(255), nullable=False)
 
 class BibliographicReference(db.Model):
     __tablename__ = 'bibliographic_references'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     reference = db.Column(db.String(1000))
 
 # Junction Tables

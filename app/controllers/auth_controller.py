@@ -6,52 +6,77 @@ from flask_login import login_manager, LoginManager, UserMixin, login_user, logi
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db
+from app import db, app
 from app.models import User
 from app import jwt
-from app import login_manager
+import re
 
-# Import routes directly in the controller
-# from app import routes
+def is_valid_email(email):
+    # Email validation regex
+    email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    return re.match(email_regex, email)
 
+
+def is_strong_password(password):
+    # Check if password is at least 8 characters long and contains at least one uppercase, one lowercase, and one digit
+    return len(password) >= 8 and any(char.isupper() for char in password) \
+        and any(char.islower() for char in password) and any(char.isdigit() for char in password)
 
 def signup():
-
     if request.method == 'POST':
         # Extract data from the request JSON
         data = request.json
-        # username = data.get('username')
         email = data.get('email')
         password = data.get('password')
         firstName = data.get('firstName')
         lastName = data.get('lastName')
         nature = data.get('nature')
-        # role = data.get('role', 'user')  # Default role is 'user' if not provided
+        field = data.get('field')
+
+        # Validate email format
+        if not is_valid_email(email):
+            return jsonify({'message': 'Invalid email format.'}), 400
 
         # Check if the email is already in use
         if User.query.filter_by(email=email).first():
             return jsonify({'message': 'Email address already in use. Please use a different email.'}), 400
+
+        # Validate password strength
+        if not is_strong_password(password):
+            return jsonify({'message': 'Password should be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.'}), 400
 
         # Hash the password before storing it in the database
         password_hash = generate_password_hash(password, method='pbkdf2:sha256')
 
         # Create a new user
         new_user = User(            
-            # username=username,
             email=email,
             password_hash=password_hash,
             firstName=firstName,
             lastName=lastName,
             nature=nature,
-            role='user')
+            field=field,
+            role='user'
+        )
 
         # Add the new user to the database
         db.session.add(new_user)
         db.session.commit()
 
-        return jsonify({'message': 'Account created successfully. You can now login.'}), 201
+        # Return the newly created user data along with the success message
+        user_data = {
+            'id': new_user.user_id,
+            'email': new_user.email,
+            'firstName': new_user.firstName,
+            'lastName': new_user.lastName,
+            'nature': new_user.nature,
+            'field': new_user.field,
+            'role': new_user.role
+        }
 
-    return jsonify({'message': 'Signup endpoint. Please use POST method to signup.'})
+        return jsonify({'message': 'Account created successfully. You can now login.', 'user': user_data}), 201
+
+    return jsonify({'message': 'Signup endpoint. Please use POST method to signup.'}), 405  # Method Not Allowed
 
 # Signin endpoint (POST)
 def signin():
@@ -71,12 +96,27 @@ def signin():
 
         if user and check_password_hash(user.password_hash, password):
             # Create a JWT
-            access_token = create_access_token(identity=user.user_id)  
-            return jsonify(access_token=access_token), 200
+            access_token = create_access_token(identity=user.user_id)
+
+            # Include user information in the response
+            user_info = {
+                'id': user.user_id,
+                'email': user.email,
+                'firstName': user.firstName,
+                'lastName': user.lastName,
+                'nature': user.nature,
+                'field': user.field,
+                'role': user.role
+                # Include other user information as needed
+            }
+
+            # Return the access token and user information in the response
+            return jsonify({'access_token': access_token, 'user': user_info}), 200
         else:
             return jsonify({"msg": "Invalid email or password"}), 401
 
     return jsonify({'message': 'Signin endpoint. Please use POST method to signin.'})
+
 
 # Signout endpoint (POST)
 @jwt_required()
@@ -92,8 +132,5 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(int(user_id))
 
 

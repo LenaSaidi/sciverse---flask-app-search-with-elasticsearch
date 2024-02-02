@@ -42,24 +42,112 @@ def remove_from_favorites(article_id):
     return jsonify({'message': 'Article removed from favorites successfully'})
 
 
+# @jwt_required()
+# def get_favorite_articles():
+#     try:
+#         user_id = get_jwt_identity() 
+#         user = User.query.get(user_id)
+        
+#         if not user:
+#             return jsonify({'error': 'User not found'}), 404
+
+#         favorite_articles = user.favorite_articles
+
+#         response_articles = []
+#         for article in favorite_articles:
+#             response_article = {
+#                 'id': article.id,
+#                 'title': article.title,
+#                 'abstract': article.abstract,
+#                 'full_text': article.full_text,
+#                 'pdf_url': article.pdf_url,
+#                 'authors': [],
+#                 'keywords': [],
+#                 'references': [],
+#                 'date': article.date.isoformat()
+#             }
+
+#             for author in article.authors:
+#                 author_data = {
+#                     'id': author.id,
+#                     'name': author.name,
+#                     'email': author.email,
+#                     'institutions': [{'institution_name': institution.institution_name} for institution in author.institutions]
+#                 }
+#                 response_article['authors'].append(author_data)
+
+#             for keyword in article.keywords:
+#                 keyword_data = {
+#                     'id': keyword.id,
+#                     'keyword': keyword.keyword
+#                 }
+#                 response_article['keywords'].append(keyword_data)
+
+#             for reference in article.references:
+#                 reference_data = {
+#                     'id': reference.id,
+#                     'reference': reference.reference
+#                 }
+#                 response_article['references'].append(reference_data)
+
+#             response_articles.append(response_article)
+
+#         return jsonify({'favorite_articles': response_articles}), 200
+
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 @jwt_required()
 def get_favorite_articles():
-    current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
-    
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
+    try:
+        user_id = get_jwt_identity() 
+        user = User.query.get(user_id)
+        
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
 
-    favorite_articles = user.favorite_articles
-    
-    # Extract article details 
-    articles = [{
-            'id': article.id,
-            'title': article.title,
-            'abstract': article.abstract,
-            # Include any other relevant details you want to return
-        }
-        for article in favorite_articles
-    ]
+        favorite_articles = user.favorite_articles
 
-    return jsonify({'favorite_articles': articles}), 200
+        response_articles = []
+        for article in favorite_articles:
+            response_article = {
+                'id': article.id,
+                'title': article.title,
+                'abstract': article.abstract,
+                'full_text': article.full_text,
+                'pdf_url': article.pdf_url,
+                'authors': [],
+                'keywords': [],
+                'references': [],
+                'date': article.date.isoformat()
+            }
+
+            # Check if keywords are stored as strings or Keyword model instances
+            if isinstance(article.keywords[0], Keyword):
+                # Extract keyword strings from Keyword model instances
+                response_article['keywords'] = [keyword.keyword for keyword in article.keywords]
+            else:
+                # Keywords are already stored as strings
+                response_article['keywords'] = article.keywords
+
+            for author in article.authors:
+                author_data = {
+                    'id': author.id,
+                    'name': author.name,
+                    'email': author.email,
+                    'institutions': [{'institution_name': institution.institution_name} for institution in author.institutions]
+                }
+                response_article['authors'].append(author_data)
+
+            for reference in article.references:
+                reference_data = {
+                    'id': reference.id,
+                    'reference': reference.reference
+                }
+                response_article['references'].append(reference_data)
+
+            response_articles.append(response_article)
+
+        return jsonify({'favorite_articles': response_articles}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

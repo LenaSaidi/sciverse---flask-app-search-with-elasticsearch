@@ -11,6 +11,7 @@ from app.controllers import moderator_controller
 from app.controllers import admin_controller
 from app.controllers import article_controller
 from app.controllers import favorite_controller
+from flask_cors import CORS
 
 
 
@@ -63,7 +64,6 @@ app.add_url_rule('/article/edits/<int:article_id>', 'get_article_edits', article
 app.add_url_rule('/favorite_articles/get', 'get_favorite_articles', favorite_controller.get_favorite_articles, methods=['GET'])
 app.add_url_rule('/favorites/add/<int:article_id>', 'add_to_favorites', favorite_controller.add_to_favorites, methods=['POST'])
 app.add_url_rule('/favorites/remove/<int:article_id>', 'remove_from_favorites', favorite_controller.remove_from_favorites, methods=['DELETE'])
-
 
 
 

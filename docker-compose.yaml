@@ -29,6 +29,12 @@ services:
     depends_on:
       - elasticsearch
 
+  grobid:
+    image: lfoppiano/grobid:0.8.0
+    ports:
+      - "8070:8070"
+    mem_limit: 5g
+
 networks:
   default:
     external:

@@ -9,51 +9,47 @@ from app.models import User
 from app import jwt
 
 
-# Import routes directly in the controller
-# from app import routes
-
-
-# @login_required
+@jwt_required()
 def get_users():
     users = User.query.all()
     result = []
     for user in users:
         user_data = {
         "user_id": user.user_id,
-        # "username": user.username,
         "password_hash": user.password_hash,
         "email": user.email,
         "firstName": user.firstName,
         "lastName": user.lastName,
         "nature": user.nature,
-        "role": user.role
+        "role": user.role,
+        "field": user.field
         }
         result.append(user_data)
     return jsonify(result)
 
-@login_required
+@jwt_required()
 def get_user(user_id):
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'error': 'User not found'}), 404
 
     user_data = {
         "user_id": user.user_id,
-        # "username": user.username,
         "password_hash": user.password_hash,
         "email": user.email,
         "firstName": user.firstName,
         "lastName": user.lastName,
         "nature": user.nature,
+        "field": user.field,
         "role": user.role
     }
     return jsonify(user_data)
 
-# @login_required
+@jwt_required()
 def update_user(user_id):
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'error': 'User not found'}), 404
 
     data = request.json
     # new_username = data.get('username', user.username)
@@ -63,12 +59,14 @@ def update_user(user_id):
     new_last_name = data.get('lastName', user.lastName)
     new_nature = data.get('nature', user.nature)
     new_role = data.get('role', user.role)
+    new_field = data.get('field', user.field)
+
 
 
     # Vérifier si le nouvel e-mail existe déjà pour un autre utilisateur
     existing_user_with_email = User.query.filter(User.email == new_email, User.user_id != user_id).first()
     if existing_user_with_email:
-        return jsonify({'message': 'Email already exists. Please use a different email.'}), 400
+        return jsonify({'error': 'Email already exists. Please use a different email.'}), 400
 
     # Mettre à jour les informations de l'utilisateur
     # user.username = new_username
@@ -77,6 +75,7 @@ def update_user(user_id):
     user.lastName = new_last_name
     user.nature = new_nature
     user.role = new_role
+    user.field = new_field
     
      # Si un nouveau mot de passe est fourni, hasher et mettre à jour le mot de passe
     if new_password:
@@ -86,11 +85,11 @@ def update_user(user_id):
 
     return jsonify({'message': 'User updated successfully'})
 
-# @login_required
+@jwt_required()
 def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'error': 'User not found'}), 404
 
     db.session.delete(user)
     db.session.commit()
