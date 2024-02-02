@@ -1,4 +1,6 @@
 import json
+import os
+from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_jwt_extended import current_user, get_jwt_identity
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
@@ -13,6 +15,7 @@ from app import login_manager
 from elasticsearch import Elasticsearch, NotFoundError
 from app import es
 # from grobid_client_python.example import JsonGenr
+from JsonFrm import Json_ret
 
 
 @login_manager.user_loader
@@ -55,7 +58,13 @@ def get_article(article_id):
 @jwt_required()
 
 def add_article():
-    # data = json.load(JsonGenr())
+    script_directory = os.path.dirname(os.path.abspath('../../pdf.bib'))
+    pdf_path = os.path.join(script_directory, 'pdf_bib')
+
+    
+    # Assuming Json_ret returns a dictionary
+    data = Json_ret(pdf_path)
+
 
     current_date = datetime.utcnow()  # Utilisez datetime.now() si vous préférez l'heure locale
 

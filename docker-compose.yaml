@@ -1,13 +1,6 @@
 version: '3'
 
-
 services:
-  grobid:
-    image: lfoppiano/grobid:0.8.0
-    ports:
-      - "8070:8070"
-    mem_limit: 5g
-    
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
     environment:
@@ -28,6 +21,11 @@ services:
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
 
+  grobid:
+    image: lfoppiano/grobid:0.8.0
+    ports:
+      - "8070:8070"
+    mem_limit: 5g
 
 
 
