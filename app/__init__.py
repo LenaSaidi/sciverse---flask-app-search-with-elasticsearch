@@ -34,9 +34,9 @@ migrate.init_app(app, db)
 es = Elasticsearch(['http://localhost:9200'])
 
 # Define upload folder
-UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'pdf'}
-app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'your_app', UPLOAD_FOLDER)
+# UPLOAD_FOLDER = 'uploads'
+# ALLOWED_EXTENSIONS = {'pdf'}
+# app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'your_app', UPLOAD_FOLDER)
 
 # # Configure GROBID client
 # grobid = grobid_client.GrobidClient('localhost', 8070, '/api/processFulltextDocument')
