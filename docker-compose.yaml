@@ -9,6 +9,12 @@ services:
     ports:
       - "9200:9200"
     mem_limit: 2g  # Adjust the memory limit as needed
+    
+  grobid:
+    image: lfoppiano/grobid:0.8.0
+    ports:
+      - "8070:8070"
+    mem_limit: 5g
 
   flask_app:
     build:
@@ -18,14 +24,20 @@ services:
       - "5000:5000"
     depends_on:
       - elasticsearch
+      - grobid
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
 
+<<<<<<< HEAD
   grobid:
     image: lfoppiano/grobid:0.8.0
     ports:
       - "8070:8070"
     mem_limit: 5g
+=======
+ 
+
+>>>>>>> 4807655249fb5a011d24d66df100c43a98743bb8
 
 
 
