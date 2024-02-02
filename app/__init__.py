@@ -40,5 +40,5 @@ CORS(app)
 
 
 # Import routes and controllers
-from app.controllers import user_controller, article_controller
+from app.controllers import user_controller, article_controller, moderator_controller
 from app import routes  # Import at the end to avoid circular import
