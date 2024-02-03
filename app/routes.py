@@ -11,6 +11,7 @@ from app.controllers import moderator_controller
 from app.controllers import admin_controller
 from app.controllers import article_controller
 from app.controllers import favorite_controller
+from app.controllers import pdf_controller
 from flask_cors import CORS
 
 
@@ -48,7 +49,7 @@ app.add_url_rule('/articles-es', 'get_all_articles_from_elasticsearch', article_
 
 
 # Article ADD/PUT/DELETE related routes in sqlite and elasticsearch
-app.add_url_rule('/article/add', 'add_article', article_controller.add_article, methods=['POST'])
+app.add_url_rule('/article/add', 'add_article', pdf_controller.add_article, methods=['POST'])
 app.add_url_rule('/article/edit/<int:article_id>', 'edit_article', article_controller.edit_article, methods=['PUT'])
 app.add_url_rule('/article/delete/<int:article_id>', 'delete_article', article_controller.delete_article, methods=['DELETE'])
 

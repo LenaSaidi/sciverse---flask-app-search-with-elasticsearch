@@ -5,7 +5,7 @@ import os
 
 
 
-def JsonGenr(pdf_path, article_name):
+def JsonGenr(pdf_path,article_name):
 
 
     client = GrobidClient(config_path="./grobid_client_python/config.json")
@@ -84,8 +84,8 @@ def JsonGenr(pdf_path, article_name):
 
 
     # Remove the XML file
-    os.remove(xml_path)
-    os.remove(json_path)
+    # os.remove(xml_path)
+    # os.remove(json_path)
 
     return json_data
 
