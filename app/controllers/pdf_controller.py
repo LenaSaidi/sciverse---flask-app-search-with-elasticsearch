@@ -29,7 +29,7 @@ def generate_unique_filename(prefix, extension):
     return filename
 
 
-
+@jwt_required()
 def add_article():
     pdf_url = request.json.get('pdf_url')
     if not pdf_url:
