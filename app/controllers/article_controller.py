@@ -218,10 +218,13 @@ def edit_article(article_id):
         # Save the updated article
         db.session.commit()
 
-
+        mapping_entry = ArticleElasticsearchMapping.query.filter_by(article_id=article.id).first()
+        if mapping_entry:
+            elasticsearch_id = mapping_entry.elasticsearch_id
         # Update the corresponding Elasticsearch index
         try:
-            es.update(index='articles_index', id=article.elasticsearch_mapping[0].elasticsearch_id, body={
+            # mapping_entry = ArticleElasticsearchMapping(article_id=new_article.id, elasticsearch_id=elasticsearch_id)
+            es.update(index='articles_index', id=elasticsearch_id, body={
                 "doc": {
                     "title": article.title,
                     "abstract": article.abstract,
