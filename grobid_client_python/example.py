@@ -4,9 +4,20 @@ import json
 import os
 
 def JsonGenr(pdf_path):
-        # pdf_path='./tests/test_pdf'
-    client = GrobidClient(config_path="./config.json")
-    client.process("processFulltextDocument", pdf_path, output="./tests/test_out/", consolidate_citations=False, tei_coordinates=True, force=False)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Use os.path.join to create relative paths
+    config_path = os.path.join(current_dir, "config.json")
+    output_dir = os.path.join(current_dir, "tests", "test_out")
+
+    # Ensure the output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Construct the absolute path for pdf_path
+    pdf_path = os.path.join(current_dir, pdf_path)
+
+    client = GrobidClient(config_path=config_path)
+    client.process("processFulltextDocument", pdf_path, output=output_dir, consolidate_citations=False, tei_coordinates=True, force=False)
 
     def parse_xml_content(xml_content):
         root = ET.fromstring(xml_content)
@@ -60,8 +71,7 @@ def JsonGenr(pdf_path):
 
         return data
 
-    # Example usage:
-    xml_path = r'D:\igl_project\sciverse---flask-app-search-with-elasticsearch\grobid_client_python\tests\test_out\test.grobid.tei.xml'
+    xml_path = os.path.join(current_dir, "tests", "test_out", "test.grobid.tei.xml")
 
     with open(xml_path, 'r', encoding='utf-8') as xml_file:
         xml_content = xml_file.read()
@@ -71,8 +81,8 @@ def JsonGenr(pdf_path):
 
     return json_data
 
-# Call the method
-if __name__ == "__main__":
-    pdf_path='./tests/test_pdf'
-    json_data = JsonGenr(pdf_path)
-    print(json_data)
+# # Call the method
+# if __name__ == "__main__":
+#     pdf_path = 'tests/test_pdf'  # Update with relative path
+#     json_data = JsonGenr(pdf_path)
+#     print(json_data)

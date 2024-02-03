@@ -9,34 +9,29 @@ services:
     ports:
       - "9200:9200"
 
-  flask_app:
-    build:
-      context: .
-      dockerfile: Dockerfile-flask
-    ports:
-      - "5000:5000"
-    depends_on:
-      - elasticsearch
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
+  # flask_app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-flask
+  #   ports:
+  #     - "5000:5000"
+  #   depends_on:
+  #     - elasticsearch
+  #   environment:
+  #     - ELASTICSEARCH_URL=http://elasticsearch:9200
   
-  node-app:
-    build:
-      context: ./node-app
-      dockerfile: Dockerfile   # Specify the correct Dockerfile name
-    ports:
-      - "3000:3000"
-    depends_on:
-      - elasticsearch
+  # node-app:
+  #   build:
+  #     context: ./node-app
+  #     dockerfile: Dockerfile   # Specify the correct Dockerfile name
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - elasticsearch
 
   grobid:
     image: lfoppiano/grobid:0.8.0
     ports:
       - "8070:8070"
     mem_limit: 5g
-
-networks:
-  default:
-    external:
-      name: _sciverse
 

@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from flask_jwt_extended import current_user, get_jwt_identity
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
@@ -11,6 +12,11 @@ from app import db
 from app import login_manager
 from elasticsearch import Elasticsearch, NotFoundError
 from app import es
+# from JsonFrm import Json_ret
+from JsonGnr import JsonGenr
+from app.controllers.pdf_controller import download_pdf, generate_unique_filename
+import os
+from datetime import datetime
 
 
 
@@ -142,106 +148,242 @@ def get_all_articles():
 
 
     #------------------------------------ ADD PUT DELETE-------------------------------------
+
 #add article
-@jwt_required()
+# @jwt_required()
 def add_article():
-    data = request.json
+    # Extract the PDF URL from the request data
+    pdf_url = request.json.get('pdf_url')
+    if not pdf_url:
+        return jsonify({'error': 'PDF URL is missing'}), 400
 
-    # Check if all required fields are present in the request data
-    required_fields = ['title', 'abstract', 'full_text', 'authors', 'keywords', 'references']
-    missing_fields = [field for field in required_fields if field not in data]
-    if missing_fields:
-        return jsonify({'error': f"Missing required fields: {', '.join(missing_fields)}"}), 400
-    
-    current_date = datetime.utcnow()  # Utilize datetime.now() if you prefer the local time
+    # Generate the PDF filename
+    pdf_filename = generate_unique_filename('article', 'pdf')
 
-    new_article = Article(
-        title=data['title'],
-        abstract=data['abstract'],
-        full_text=data['full_text'],
-        pdf_url=data.get('pdf_url'),  # optional field
-        date=current_date
-    )
-    db.session.add(new_article)
-    db.session.flush()
+    # Set the relative path to save the PDF
+    pdf_relative_path = os.path.join('grobid_client_python', 'tests', 'test_pdf', pdf_filename)
+    print(pdf_relative_path)
 
-    # Add authors and their institutions
-    for author_data in data['authors']:
-        author = Author(
-            name=author_data['name'],
-            email=author_data['email']
+    # Download the PDF file
+    try:
+        download_pdf(pdf_url, pdf_relative_path)
+    except Exception as e:
+        return jsonify({'error': f"Failed to download PDF: {str(e)}"}), 500
+
+    # Use GROBID to generate JSON data from the provided PDF
+    try:
+        json_data = JsonGenr(pdf_relative_path, pdf_filename)
+    except Exception as e:
+        return jsonify({'error': f"Failed to process PDF with GROBID: {str(e)}"}), 500
+
+    # Create and add the article to the database
+    try:
+        new_article = Article(
+            title=json_data.get('title', ''),
+            abstract=json_data.get('abstract', ''),
+            full_text=json_data.get('full_text', ''),
+            pdf_url=pdf_relative_path,
+            date=datetime.utcnow()  # Utilize datetime.now() if you prefer the local time
         )
-        db.session.add(author)
+        db.session.add(new_article)
         db.session.flush()
 
-        # Check if author has institutions specified
-        if 'institutions' not in author_data or not author_data['institutions']:
-            db.session.rollback()
-            return jsonify({'error': "Each author must have at least one institution specified"}), 400
-
-        for institution_info in author_data['institutions']:
-            institution = Institution(institution_name=institution_info['institution_name'])
-            db.session.add(institution)
+        # Add authors and their institutions
+        for author_data in json_data['authors']:
+            author = Author(
+                name=author_data['name'],
+                email=author_data['email']
+            )
+            db.session.add(author)
             db.session.flush()
 
-            author_institution = AuthorInstitution(author_id=author.id, institution_id=institution.id)
-            db.session.add(author_institution)
+            for institution_info in author_data['institutions']:
+                institution = Institution(institution_name=institution_info['institution_name'])
+                db.session.add(institution)
+                db.session.flush()
 
-        # Create relation between article and author
-        relation = ArticleAuthor(article_id=new_article.id, author_id=author.id)
-        db.session.add(relation)
+                author_institution = AuthorInstitution(author_id=author.id, institution_id=institution.id)
+                db.session.add(author_institution)
 
-    # Add keywords
-    for keyword_data in data['keywords']:
-        keyword = Keyword(keyword=keyword_data)
-        db.session.add(keyword)
-        db.session.flush()
+            relation = ArticleAuthor(article_id=new_article.id, author_id=author.id)
+            db.session.add(relation)
 
-        relation = ArticleKeyword(article_id=new_article.id, keyword_id=keyword.id)
-        db.session.add(relation)
+        # Add keywords
+        for keyword_data in json_data['keywords']:
+            keyword = Keyword(keyword=keyword_data)
+            db.session.add(keyword)
+            db.session.flush()
 
-    # Add references
-    for reference_data in data['references']:
-        reference = BibliographicReference(reference=reference_data)
-        db.session.add(reference)
-        db.session.flush()
+            relation = ArticleKeyword(article_id=new_article.id, keyword_id=keyword.id)
+            db.session.add(relation)
 
-        relation = ArticleReference(article_id=new_article.id, reference_id=reference.id)
-        db.session.add(relation)
+        # Add references
+        for reference_data in json_data['references']:
+            reference = BibliographicReference(reference=reference_data)
+            db.session.add(reference)
+            db.session.flush()
 
-    try:
+            relation = ArticleReference(article_id=new_article.id, reference_id=reference.id)
+            db.session.add(relation)
+
         db.session.commit()
-                # Si la base de données est mise à jour avec succès, essayez d'indexer l'article dans Elasticsearch
+
+        # Index the article in Elasticsearch
         try:
             response = es.index(index='articles_index', body={
-                "title": data.get('title', ''),
-                "abstract": data.get('abstract', ''),
-                "full_text": data.get('full_text', ''),
-                "keywords": data.get('keywords', []),
-                "pdf_url": data.get('pdf_url', ''),
-                "references": data.get('references', []),
-                "date": data.get('date', ''),
-                "authors": data.get('authors', []),
-                "institution_names": [inst.get('institution_name', '') for author in data.get('authors', []) for inst in author.get('institutions', []) if inst.get('institution_name', '')]
-                # Vous pouvez ajouter d'autres champs si nécessaire
+                "title": json_data.get('title', ''),
+                "abstract": json_data.get('abstract', ''),
+                "full_text": json_data.get('full_text', ''),
+                "keywords": json_data.get('keywords', []),
+                "pdf_url": json_data.get('pdf_url', ''),
+                "references": json_data.get('references', []),
+                "date": json_data.get('date', ''),
+                "authors": json_data.get('authors', []),
+                "institution_names": [inst.get('institution_name', '') for author in json_data.get('authors', []) for inst in author.get('institutions', []) if inst.get('institution_name', '')]
             })
             elasticsearch_id = response['_id']
 
-            # Ajoutez une entrée dans la table de correspondance
             mapping_entry = ArticleElasticsearchMapping(article_id=new_article.id, elasticsearch_id=elasticsearch_id)
             db.session.add(mapping_entry)
             db.session.commit()
             return jsonify({"message": "Article added and indexed successfully!"}), 201
         except Exception as es_error:
-            # Si l'indexation dans Elasticsearch échoue, faites un rollback de la transaction de la base de données
             db.session.rollback()
             return jsonify({"error": f"Failed to index the article in Elasticsearch: {str(es_error)}"}), 500
 
     except Exception as db_error:
-        # Si la mise à jour de la base de données échoue, renvoyez une erreur appropriée
         db.session.rollback()
         return jsonify({'error': f"Failed to add the article to the database: {str(db_error)}"}), 500
-    
+
+
+# # @jwt_required()
+# def add_article():
+#     # Extract the PDF path from the request data
+#     # pdf = request.json.get('pdf_path')
+#     # article_name = os.path.splitext(os.path.basename(pdf))[0]
+#     # pdf_path = os.path.dirname(pdf)
+
+#     # Extract the PDF URL from the request data
+#     pdf_url = request.json.get('pdf_url')
+#     if not pdf_url:
+#         return jsonify({'error': 'PDF URL is missing'}), 400
+
+#     # Generate the PDF filename
+#     pdf_filename = generate_unique_filename('article', 'pdf')
+
+#     # Set the relative path to save the PDF
+#     pdf_relative_path = os.path.join('..','..', 'grobid_client_python', 'tests', 'test_pdf', pdf_filename)
+
+#     # Get the absolute path to the directory containing article_controller.py
+#     current_dir = os.path.dirname(os.path.abspath(__file__))
+#     pdf_path = os.path.abspath(os.path.join(current_dir, pdf_relative_path))
+#     print(pdf_path)
+#     pdf_relative_path = os.path.join('grobid_client_python', 'tests', 'test_pdf', pdf_filename)
+
+
+
+#     # Download the PDF file
+#     try:
+#         download_pdf(pdf_url, pdf_relative_path)
+#     except Exception as e:
+#         return jsonify({'error': f"Failed to download PDF: {str(e)}"}), 500
+
+
+#     # Use GROBID to generate JSON data from the provided PDF
+#     try:
+#         json_data = JsonGenr(pdf_path, pdf_filename)
+#     except Exception as e:
+#         return jsonify({'error': f"Failed to process PDF with GROBID: {str(e)}"}), 500
+
+#     # Create and add the article to the database
+#     try:
+#         new_article = Article(
+#             title=json_data.get('title', ''),
+#             abstract=json_data.get('abstract', ''),
+#             full_text=json_data.get('full_text', ''),
+#             pdf_url=pdf_relative_path,
+#             date=datetime.utcnow()  # Utilize datetime.now() if you prefer the local time
+#         )
+#         db.session.add(new_article)
+#         db.session.flush()
+
+#         # Add authors and their institutions
+#         for author_data in json_data['authors']:
+#             author = Author(
+#                 name=author_data['name'],
+#                 email=author_data['email']
+#             )
+#             db.session.add(author)
+#             db.session.flush()
+
+#             # # Check if author has institutions specified
+#             # if 'institutions' not in author_data or not author_data['institutions']:
+#             #     db.session.rollback()
+#             #     return jsonify({'error': "Each author must have at least one institution specified"}), 400
+
+#             for institution_info in author_data['institutions']:
+#                 institution = Institution(institution_name=institution_info['institution_name'])
+#                 db.session.add(institution)
+#                 db.session.flush()
+
+#                 author_institution = AuthorInstitution(author_id=author.id, institution_id=institution.id)
+#                 db.session.add(author_institution)
+
+#             # Create relation between article and author
+#             relation = ArticleAuthor(article_id=new_article.id, author_id=author.id)
+#             db.session.add(relation)
+
+#         # Add keywords
+#         for keyword_data in json_data['keywords']:
+#             keyword = Keyword(keyword=keyword_data)
+#             db.session.add(keyword)
+#             db.session.flush()
+
+#             relation = ArticleKeyword(article_id=new_article.id, keyword_id=keyword.id)
+#             db.session.add(relation)
+
+#         # Add references
+#         for reference_data in json_data['references']:
+#             reference = BibliographicReference(reference=reference_data)
+#             db.session.add(reference)
+#             db.session.flush()
+
+#             relation = ArticleReference(article_id=new_article.id, reference_id=reference.id)
+#             db.session.add(relation)
+
+#         db.session.commit()
+
+#         # Index the article in Elasticsearch
+#         try:
+#             response = es.index(index='articles_index', body={
+#                 "title": json_data.get('title', ''),
+#                 "abstract": json_data.get('abstract', ''),
+#                 "full_text": json_data.get('full_text', ''),
+#                 "keywords": json_data.get('keywords', []),
+#                 "pdf_url": json_data.get('pdf_url', ''),
+#                 "references": json_data.get('references', []),
+#                 "date": json_data.get('date', ''),
+#                 "authors": json_data.get('authors', []),
+#                 "institution_names": [inst.get('institution_name', '') for author in json_data.get('authors', []) for inst in author.get('institutions', []) if inst.get('institution_name', '')]
+#                 # You can add other fields if necessary
+#             })
+#             elasticsearch_id = response['_id']
+
+#             # Add an entry in the mapping table
+#             mapping_entry = ArticleElasticsearchMapping(article_id=new_article.id, elasticsearch_id=elasticsearch_id)
+#             db.session.add(mapping_entry)
+#             db.session.commit()
+#             return jsonify({"message": "Article added and indexed successfully!"}), 201
+#         except Exception as es_error:
+#             # If indexing in Elasticsearch fails, rollback the database transaction
+#             db.session.rollback()
+#             return jsonify({"error": f"Failed to index the article in Elasticsearch: {str(es_error)}"}), 500
+
+#     except Exception as db_error:
+#         # If updating the database fails, return an appropriate error
+#         db.session.rollback()
+#         return jsonify({'error': f"Failed to add the article to the database: {str(db_error)}"}), 500
+
 
 
 
@@ -493,3 +635,5 @@ def get_db_article_id(es_id):
         return mapping_entry.article_id
     else:
         return None
+
+

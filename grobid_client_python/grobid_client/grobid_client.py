@@ -46,6 +46,7 @@ class GrobidClient(ApiClient):
             'sleep_time': sleep_time,
             'timeout': timeout
         }
+        print(f"Config path: {config_path}") 
         if config_path:
             self._load_config(config_path)
         if check_server:
