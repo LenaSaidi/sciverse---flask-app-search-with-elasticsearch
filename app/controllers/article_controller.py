@@ -163,7 +163,7 @@ def add_article():
     # Set the relative path to save the PDF
     pdf_relative_path = os.path.join('grobid_client_python', 'tests', 'test_pdf', pdf_filename)
     print(pdf_relative_path)
-
+    print("here",pdf_filename)    
     # Download the PDF file
     try:
         download_pdf(pdf_url, pdf_relative_path)

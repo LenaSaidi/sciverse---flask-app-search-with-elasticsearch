@@ -1,4 +1,4 @@
-from grobid_client.grobid_client import GrobidClient
+from grobid_client_python.grobid_client.grobid_client import GrobidClient
 import xml.etree.ElementTree as ET
 import json
 import os
@@ -61,9 +61,9 @@ def JsonGenr(pdf_path, article_name):
             'full_text': extract_full_text(root),
         }
 
-        with open(json_path, 'w') as json_file:
-            json.dump(data, json_file, indent=2)
-            return data
+        ''' with open(json_path, 'w') as json_file:
+            json.dump(data, json_file, indent=2)'''
+        return data
 #______________ CHOFI HKD T'UTILISIHA ________________________
     # # Example usage:
     # xml_path = "./tests/test_out/test.grobid.tei.xml"
@@ -84,8 +84,8 @@ def JsonGenr(pdf_path, article_name):
 
 
     # Remove the XML file
-    os.remove(xml_path)
-    os.remove(json_path)
+   # os.remove(xml_path)
+   # os.remove(json_path)
 
     return json_data
 

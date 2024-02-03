@@ -84,6 +84,10 @@ def signup():
 
 # Signin endpoint (POST)
 def signin():
+    """meta = db.metadata
+    for table in reversed(meta.sorted_tables):
+        db.session.execute(table.delete())
+    db.session.commit()"""
     if request.method == 'POST':
         if not request.is_json:
             return jsonify({"error": "Missing JSON in request"}), 400
@@ -120,6 +124,7 @@ def signin():
             return jsonify({"error": "Invalid email or password"}), 401
 
     return jsonify({'error': 'Signin endpoint. Please use POST method to signin.'})
+
 
 
 # Signout endpoint (POST)

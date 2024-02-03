@@ -82,7 +82,7 @@ def JsonGenr(pdf_path):
     return json_data
 
 # # Call the method
-# if __name__ == "__main__":
-#     pdf_path = 'tests/test_pdf'  # Update with relative path
-#     json_data = JsonGenr(pdf_path)
-#     print(json_data)
+    if __name__ == "__main__":
+        pdf_path = './tests/test_pdf'  # Update with relative path
+        json_data = JsonGenr(pdf_path)
+        print(json_data)
