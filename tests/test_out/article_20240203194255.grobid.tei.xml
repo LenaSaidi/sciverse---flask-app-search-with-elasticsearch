@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:space="preserve" xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 https://raw.githubusercontent.com/kermitt2/grobid/master/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">A Prototype Implementation of an Orthographic Software Modeling Environment</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName coords="1,193.53,137.97,76.40,11.06"><forename type="first">Colin</forename><surname>Atkinson</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="institution">University of Mannheim</orgName>
+								<address>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName coords="1,343.77,137.97,68.42,11.06"><forename type="first">Dietmar</forename><surname>Stoll</surname></persName>
+							<affiliation key="aff1">
+								<orgName type="institution">University of Mannheim</orgName>
+								<address>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName coords="1,191.17,199.15,81.11,11.06"><forename type="first">Christian</forename><surname>Tunjic</surname></persName>
+							<affiliation key="aff2">
+								<orgName type="institution">University of Mannheim</orgName>
+								<address>
+									<country key="DE">Germany</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName coords="1,338.57,199.15,78.83,11.06"><forename type="first">Jacques</forename><surname>Robin</surname></persName>
+							<affiliation key="aff3">
+								<orgName type="institution">Universidade Federal de Pernambuco</orgName>
+								<address>
+									<settlement>Recife</settlement>
+									<country key="BR">Brasil</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">A Prototype Implementation of an Orthographic Software Modeling Environment</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="MD5">E66B9930FC4460FE000A0A5E5D44FEB6</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<encodingDesc>
+			<appInfo>
+				<application version="0.8.0" ident="GROBID" when="2024-02-03T18:43+0000">
+					<desc>GROBID - A machine learning software for extracting information from scholarly documents</desc>
+					<ref target="https://github.com/kermitt2/grobid"/>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>D.1.7 [Programming Techniques]: Visual Programming</term>
+					<term>D.2.2 [Design Tools and Techniques]: Computer-aided software engineering (CASE)</term>
+					<term>D.2.6 [Software Engineering]: Programming Environments-Graphical environments Orthographic Software Modeling, View-based Modeling KobrA2::SUM::Constraint::Behavioral KobrA2::SUM::Constraint::Structural KobrA2::SUM::Constraint KobrA2::SUM::Constraint::Common KobrA2::SUM::Behavior::ProtocolStateMachines KobrA2::SUM::Behavior::Common KobrA2::SUM::Behavior::Activities KobrA2::SUM::Behavior::Actions KobrA2::SUM::Behavior KobrA2::SUM::Structure::Classes KobrA2::SUM::Structure::Types KobrA2::SUM::Structure::Instances KobrA2::SUM::Structure::Elements KobrA2::SUM::Structure KobrA2::SUM::Constraint::OclExpressions</term>
+				</keywords>
+			</textClass>
+			<abstract>
+<div xmlns="http://www.tei-c.org/ns/1.0"><p>Orthographic Software Modeling (OSM) is a view-centric software engineering approach that aims to leverage the orthographic projection metaphor used in the visualization of physical objects to visualize software systems. Although the general concept of OSM does not prescribe specific sets of views, a concrete OSM environment has to be specific about the particular views to be used in a particular project. At the University of Mannheim we are developing a prototype OSM environment, nAOMi, that supports the views defined by the KobrA 2.0 method, a version of KobrA adapted for OSM. In this paper we provide an overview of the KobrA 2.0 metamodel underpinning nAOMi and give a small example of its use to model a software system.</p></div>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<facsimile>
+		<surface n="1" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="2" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="3" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="4" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="5" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="6" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="7" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="8" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="9" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+		<surface n="10" ulx="0.0" uly="0.0" lrx="595.276" lry="841.89"/>
+	</facsimile>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.">INTRODUCTION</head><p>Orthographic Software Modeling (OSM) is based on three fundamental hypotheses -(a) that it is feasible to integrate the many different kinds of artifacts used in contemporary software engineering methods within a single coherent methodology in which they are treated as views, (b) that it is feasible to create an efficient and scalable way of supporting these views by generating them dynamically, on-the-fly, from a Single Underlying Model (SUM) using model-based transformations and (c) that it is feasible to provide an intuitive metaphor for navigating around these many views by adapting the orthographic projection technique underpinning the CAD tools used in other engineering disciplines. As shown in Figure <ref type="figure" coords="1,409.15,470.59,3.58,7.86" target="#fig_0">1</ref>, the main advantages of using the idea of orthographic projection to define the views used to visualize and described a system are that they (a) can be organized according to a simple and easy-to-understand metaphor and (b) collectively represent all the properties of a system with minimal overlap and redundancy. In practice this translates into a set of "dimensions", each containing well defined choices (or so called "dimension elements") that can be used to select individuals views.</p><p>As shown in Figure <ref type="figure" coords="1,407.29,564.74,3.58,7.86" target="#fig_1">2</ref>, the main advantage of making the artifacts used to describe a software system views of a SUM is that the number of pairwise coherence relationships that have to be maintained is reduced and new views can be introduced by simply defining their relationship to the SUM. Moreover, the importance of this advantage grows quickly as the size of the system and the complexity of the deployed development methodology increase. Another important advantage is that the dominance of one particular kind of view over the development process (e.g. code) at the expense of other kinds of views (e.g. graphical models) is reduced so that any appropriate type of views can be used to enrich the underlying description of the system, depending on the needs and skills of the stakeholder involved. This makes it possible to subsume all view types under the same, overarch-SUM SUM / View Centric Environment Artifact / Tools Centric Environment ing development process and methodology (e.g. agile-driven, focusing on small development cycles, or model-driven development, based on transformations between abstraction levels). Although the details of how the views are created from the SUM and how the SUM is updated from the views are not central to the approach, a natural implementation is to use the visualization and transformation technologies offered by model driven software engineering (MDSE).</p><p>To explore the validity of these hypotheses at the University of Mannheim we have been developing a prototype OSM modeling environment based on an enhanced version of the KobrA method for model-driven, component-oriented development, KobrA 2.0 <ref type="bibr" coords="2,155.27,412.63,9.20,7.86" target="#b1">[1]</ref>. This was chosen as a basis for the prototype, known as the Open, Adaptable, Orthographic Modeling Environment (nAOMi) <ref type="bibr" coords="2,187.47,433.55,14.32,7.86" target="#b13">[13]</ref> because its views were designed with the precise goals of being (a) genuine projections of a subject containing carefully selected subsets of information about that subject, (b) minimalistic in the sense that they should overlap to the smallest extent possible and contain the minimum necessary models elements, and (c) selectable via a set of independent "dimensions" which reflect different fundamental concerns of development (i.e. abstraction levels, composition or variants). In other words, KobrA already provided one of the "most orthogonal" sets of views for visualizing software systems of any contemporary method. More details about the actual views and dimensions defined in KobrA are presented in the following sections. More information on OSM can be found in <ref type="bibr" coords="2,265.57,569.54,9.71,7.86" target="#b2">[2]</ref> and <ref type="bibr" coords="2,53.80,580.00,9.20,7.86" target="#b3">[3]</ref>.</p><p>nAOMi is implemented as an Eclipse plugin using the Eclipse Modeling Framework (EMF) as the underlying modeling platform and UML 2.0 tools <ref type="bibr" coords="2,196.29,611.38,9.72,7.86" target="#b4">[4]</ref> to generate and edit views. The KobrA 2.0 metamodel on which the current version of nAOMi is based is a specialization of the UML metamodel composed of three separate packages -one for the SUM, one for the views and one for the transformations (Figure <ref type="figure" coords="2,86.66,663.68,3.58,7.86" target="#fig_2">3</ref>). The UML was chosen as the base language because of its maturity and widespread acceptance, making the environment usable to the largest possible body of developers. UML elements not needed in KobrA 2.0 are excluded using OCL constraints while new elements or properties are introduced by specializing existing elements.</p><p>The unique contribution of this paper is to elaborate on the structure of the KobrA 2.0 metamodel and how it is used to drive nAOMi. The three following sections each focus on one of the three main components of the metamodel -the SUM, the views and the transformations . This is followed by a brief overview of the OSM navigation paradigm in Section 5 before a small example of the approach is presented in Section 6. Section 7 then concludes the paper with related and future work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.">SUM PACKAGE</head><p>Figure <ref type="figure" coords="2,354.85,522.89,4.61,7.86" target="#fig_3">4</ref> depicts the internal structure of the SUM package which is based on the UML metamodel. There are three main subpackages, two containing the structural and behavioral constructs respectively, and one containing the constraints that ensure that the metaclasses are used according to the KobrA conventions and rules.</p><p>The Classes subpackage of the Structure package contains some of the most fundamental elements of the KobrA metamodel, such as Class and ComponentClass. The internal structure of this package is illustrated in Figure <ref type="figure" coords="2,519.69,617.04,3.58,7.86" target="#fig_5">5</ref>. Com-ponentClass represents objects with complex and reusable behaviors, while Class captures simple "data type" objects that have only very simple or non-reusable behaviors. The modeler has to decide whether it is necessary to model a specific part of the system as a ComponentClass and include state charts and activity diagrams, or whether it is sufficient to use a Class (which is limited to using OCL constraints).</p><p>ComponentClass inherits (indirectly via Class) from Communications so it also has the isActive attribute. This makes it possible to model whether its instances are active or passive. Active objects, which can be used to model threads and processes <ref type="bibr" coords="3,92.97,581.45,13.29,7.86">([8]</ref> p. 438), start to execute their behavior as soon as they are created and perform operations spontaneously.</p><p>A ComponentClass may exhibit complex behavior. In Ko-brA, this behavior may be specified in the form of UML State Diagrams (defining acceptable operation invocation sequences), and in the form of Activities (defining algorithms of operations). UML Interaction elements (in sequence diagrams) can be derived from the activity elements and thus are not included in the SUM. As KobrA aims to facilitate automatic checking of allowed sequences of operation calls, Protocol State Machines are supported instead of general state machines. Since the latter include a large variety of elements not needed for specifying acceptable operation se-quences or automatic checking, OCL constraints are used to prohibit the use of unwanted features. For example, since KobrA has no concept of roles for components, the use of role also needs to be prohibited. The part association refers to owned properties of components whose attribute isComposite is true. As KobrA uses associations like nests and creates for components, part, required and provided are not needed. Connectors (i.e. delegation and assembly) are not used in KobrA either so ownedConnector is excluded.  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.">VIEWS PACKAGE</head><p>The structure of the Views package is illustrated in Figure <ref type="figure" coords="4,53.80,543.81,3.58,7.86" target="#fig_6">6</ref>. Again, since most of the views defined in KobrA 2.0 are based on UML diagrams, the view metamodels have similar elements to the SUM metamodel. The big difference to the SUM is that there are no restrictions on the use of the view metamodel elements. For instance, views for a particular purpose such as supporting model checkers can be supported by adding elements unrelated to the UML.</p><p>The substructure of the Views package reflects the types and organization of the KobrA views according to the view "dimensions" supported in nAOMi (cf. example in <ref type="bibr" coords="4,263.75,637.96,29.15,7.86;4,53.80,648.42,7.16,7.86">Section 6)</ref>. At the top level, the Views package is thus decomposed into the Specification and Realization options of the encapsulation dimension. These, in turn are both decomposed into the Structural, Behavioral and Operational options of the Projection dimension. Finally, with the exception of the behavioral option, these are also all subdivided into the Service and Type options of the granularity dimension. This dimension, with its two options, is an addition to the original version of KobrA.</p><p>The Service view shows the direct, publicly visible relationships of the subject ComponentClass to other Compo-nentClasses, while the Type view shows the publicly visible relationships of the subject to simple Classes. As with the SUM, constraints have been defined to control what can go into each view and when they are well formed. For every view, a constraint enumerates all allowed elements (not shown in this paper).</p><p>In the following, some of the other constraints for the Service view are elaborated. Since this view is a black-box view, the internals of ComponentClasses (nestedClassifier ) are not shown.</p><p>context ComponentClass --no nested classifiers , no protocol inv : nestedClassifier -&gt; union ( protocol ) -&gt; isEmpty () Classes are only allowed if they are generalizations of Com-ponentClasses, (or any of its superclasses, since a Compo-nentClass may inherit from a class as shown in the constraints with context Class. The following invariants ensure that only publicly visible attributes and operations are in this view, for both classes and ComponentClasses (which inherit from Class). Only operation signatures are shown in this view, so pre-, post-and bodyconditions, as well as activities are omitted, which is reflected in the last constraint.</p><p>context Operation --only the signature of the Operation is shown , not its behavior ( role name " method " refers to the Activities of the operation ) , or dependencies inv : method -&gt; union ( precondition ) -&gt; union ( body ) -&gt; union ( postcondition ) -&gt; isEmpty ()</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.">TRANSFORMATIONS PACKAGE</head><p>The package AllViews provides the foundation for specifying the transformations between the SUM and the views in both directions. Part of the package's contents are shown in Figure <ref type="figure" coords="5,358.80,711.19,3.58,7.86" target="#fig_7">7</ref>. The Abstraction concept (which is in fact a dependency reused from the UML but with additional constraints) plays the key role in relating elements from the SUM to elements of a view. Abstraction is actually mapped to ExpressionInOcl. When appearing in transformations, the equals sign links elements in the SUM to the respective elements in the view, and vice versa. For instance, equality of the general meta-association of a Generalization in a transformation invariant means that, when following general, there must be an element in the SUM and in the view for which similar transformation expressions are specified.</p><p>In the case of KobrA 2.0, which has many projections that just select a subset of elements using one-to-one abstractions, this allows concise declarative TransformationExpressions. Together with the view constraints, a CASE tool can be implemented which uses a transformation language of the implementor's choice, for instance the Atlas Transformation Language (ATL) <ref type="bibr" coords="6,123.51,506.85,14.32,7.86" target="#b11">[11]</ref> or QVT <ref type="bibr" coords="6,175.04,506.85,9.20,7.86" target="#b9">[9]</ref>. The role names se and ve are short for SumElement and ViewElement, respectively. These roles subset the client and supplier roles from the UML. SUM elements are translated into UML elements with stereotypes, so that the views are easy to manage for developers familiar with the UML. The bidirectional mappings between stereotyped view elements and non-stereotyped SUM elements are expressed in the constraints of the Association-Abstraction, a subclass of the Abstraction from the AllViews package. This is also an example of a transformation which is reused in other views. Figure <ref type="figure" coords="6,355.29,397.36,4.61,7.86" target="#fig_10">8</ref> shows the main elements involved in the transformation of the black box structural view for Component-Classes. The first transformation constraint is on the view and declares the starting point for the transformation. It states that the subject ComponentClass and its generalizations (using a SUM utility function, superClosure) are in the view.</p><p>The following transformation rules illustrate how to create the output (i.e. view) elements from the input (i.e. SUM) elements, such as the publicly visible attributes and operations of the ComponentClass and the acquired ComponentClasses. The first constraint for ComponentClassAbstraction states that references to potential general classes (and Component-Classes) of ComponentClasses are mirrored in the view. In addition, ComponentClasses will be shown with the corresponding stereotypes. The ComponentClass owns various types of associations, so in this view only the acquires associations are selected (whose transformation rules are covered in the common transformation packages).For classes and ComponentClasses, only publicly visible attributes and operations appear in the view. Class invariants are also copied. Classes that may appear in this view (e.g. as generalizations of ComponentClasses) may have a powertype (role name powertypeExtent) which will be displayed.</p><p>The last transformation statement copies the class references of operations. As with all views, the transformation rules, the common transformation statements (which also cover operations) and the view constraints serve as a specification for the implementation of a view. Individual CASE tools can use different implementation techniques as long as they conform to the semantics of these rules and constraints.  For the black box type view, only publicly visible attributes and operations of classes (as opposed to Compo-nentClasses) used by the subject can be seen. This is specified in the first rule which defines owned members of the view and thus serves as the starting point of the transformation. cbbTypes is a utility function defined in the SUM which computes the black box types by selecting the types of the subject's public attributes and parameter types of its public operations.</p><p>Class invariants and potential powertypes and connections to the classes in this view are shown as well. There may also be Enumerations, for which the EnumerationLiterals are displayed.</p><p>The transformation rules for this view are almost the same as the realization transformation constraints from the package Transformation::Realization::Structural::Class::Type. The differences are the select(visibility=#public) statements for operations and attributes. s t r i n g I n S i g n a t u r e</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.">NAVIGATION</head><p>Most of today's tools use some combination of trees to organize the content of models as well as the views used to visualize a software system or component. In an any environment incorporating a number of different tools there is invariably a large number of different trees storing a heterogeneous mix of artifacts including model elements (e.g. classes, instances, associations), diagrams (e.g. class diagrams, state diagrams) and other artifact types (source code, XML files, configuration files ). To work with all the views in a traditional development environment, therefore, engineers typically have to learn about the organization structures of all the incorporated tools.</p><p>In contrast to conventional paradigms for organizing and navigating the many views used to visualize a system, OSM employs the metaphor of a multi-dimensional cube. More specifically, as illustrated in Figure <ref type="figure" coords="7,461.33,648.42,3.58,7.86" target="#fig_12">9</ref>, OSM regards dimension of the underlying methodology as representing a different dimension of the cube, and each independently variable aspect of that dimension is a selectable dimension element. Selecting a view thus simply corresponds to selecting a single cell within the cube. In general, three types of dimensions are supported: static dimensions in which the number of selectable elements (i.e. coordinates) is fixed, dynamic dimensions in which the number of elements is dynamic (i.e. derived from the SUM), and mixed dimensions which have both static and dynamic elements.</p><p>To support the OSM dimension based navigation metaphor for KobrA, we defined the seven dimensions indicated on the left hand side of Figure <ref type="figure" coords="8,151.69,293.56,9.21,7.86" target="#fig_13">10</ref> which is a sceenshot of nAOMI. The Abstraction dimension (not expanded here), which has three static dimension elements, PIM (platform independent model), PSM (platform specific model) and Code, captures the model-driven development concern of KobrA. The version dimension captures the state of the modeled system at specific points in time. The Component dimension, which has dynamic dimension elements defined by instances of the class ComponentClass in the SUM, captures the componentbased development concern of KobrA.</p><p>The Encapsulation dimension, which has two fixed elements, supports the distinction between Specification (black box) and Realization (white box) views of components, while the Projection dimension with the fixed elements Structural, Operational and Behavioral covers the different information types. The Granularity dimension provides a finer grained distinction between views describing the types used by components (Type granularity) and views describing the required and provided interfaces (Service granularity). The Operation dimension allows a selection of individual operations.</p><p>In the ideal case, when all views are truly orthogonal, the choices that can be made in each dimensions are completely independent. However, this is very difficult to achieve in software engineering. The approach still works if the views are not completely orthogonal, but dependencies then occur between different choices in different dimensions, so that the decisions made in one dimensions may affect choices possible in another dimension. This is best handled by giving dimensions a precedence ranking determined by the order in which they appear (the top being the highest). When an element in a dimension is selected, the tool automatically makes default selections for dimensions of lower precedence (i.e. dimensions lower down) and disables selections that would navigate to cells (i.e. views) which are not (yet) defined by the method at hand.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.">SHOPPING CART EXAMPLE</head><p>To show how a software system can be specified using nAOMi, this section presents a case study based on a shopping cart system. A ShoppingCart component collects and manages the products selected by users and supports payment via a credit card. Figure <ref type="figure" coords="8,450.70,397.36,9.21,7.86" target="#fig_13">10</ref> illustrates a structural view of the component.</p><p>In the dimension navigator on the left hand side, PIM was chosen for the "Abstraction Level" (not expanded in the screenshot). The second dimension is the state of the software system at a certain point in time. The picture shows that the latest available version was chosen. As with every choice in a dimension, it may influence the options in lower ranked dimensions. The component under consideration is the ShoppingCart, for which a black box view is selected in the next dimension. After the user selects the structural projection option and the service level granularity, the tool automatically chooses the option for all operations in the last dimension, as there is no editor registered for the other options.</p><p>The component under development is presented with the stereotype subject and its relationship to other components and classes is shown in the view, which corresponds to a cell of the multi-dimensional navigation cube, and is generated on-the-fly from the SUM when it is selected. The classes Product and CreditCard can be used as data types in the operations of the component.</p><p>Figure <ref type="figure" coords="8,356.58,627.50,9.21,7.86" target="#fig_14">11</ref> illustrates the operational view in which an operation can be formalized using pre-and postconditions. The precondition corresponds to the assumes clause in and the postcondition corresponds to the result clause. As in the UML, the precondition of an operation must be true when the operation is invoked and the postcondition must be true when the operation is finished. The operation addProduct in Figure <ref type="figure" coords="8,357.27,700.73,9.21,7.86" target="#fig_14">11</ref> must be in state CollectingProducts or Empty when invoked. This is also visible in the behavioral view, since there are only two transitions with the operation ad-dProduct. Both leads to the state CollectingProducts which is also a postcondition of the operation. The second postcondition is that the cost attribute of the component must be increased by the price of the added product. The pre-and postcondition can be expressed using the OCL. The properties of the component, states and operation parameters can be used to formalise the constraints like as in this example.</p><p>Figure <ref type="figure" coords="9,90.86,326.13,9.21,7.86" target="#fig_15">12</ref> shows the publicly visible behaviour of the Shop-pingCart component with states and transitions. The conditional transitions map to operations of the component. Like every view, this view is also synchronized with the SUM so that it is guaranteed that its operations, states and properties are consistent with those in the structural view. Although the operational view seems to be similar to the behavioral view because of the overlapping information within them, there are significant differences. The focus of the operational view is on a precise formal definition of an operation of a component. The operations can be enriched by preand postconditions which can be defined using complex OCL statements, that formalize the complete behavior of an operation. The additional information in the OCL statements can be used for code generation and documentation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.">CONCLUSION</head><p>At the beginning of the paper we identified three fundamental hypothesis upon which the notion of OSM is based -(a) that it is feasible to integrate the many different kinds of artifacts used in contemporary software engineering methods within a single coherent methodology in which they are treated as views, (b) that it is feasible to create an efficient and scalable way of supporting these views by generating them dynamically, on-the-fly, from a Single Underlying Model (SUM) using model-based transformations and (c) that it is feasible to provide an intuitive metaphor for navigating around these many views by adapting the orthographic projection technique underpinning the CAD tools used in other engineering disciplines.</p><p>The prototype tool, nAOMi, described in this paper represents the first step towards demonstrating the validity of these hypotheses and showing that OSM is a viable approach to software engineering. Of the three hypotheses, (a) and (c) are most convincingly demonstrated by the prototype, since it shows that it is indeed possible to support all the views of the KobrA method within a single navigation metaphor. The prototype tool does not demonstrate the validity of hypothesis (b) to the same extent as the others due to its small size. Although it demonstrates the feasibility of generating views from the SUM and vice-versa, the question of whether such an approach scales up to large environments is still open.</p><p>Although nOAMi is the only tool developed with the specific aim of supporting KobrA-based OSM, several other tools and methods have similar properties or aims. For example, Glinz et al. <ref type="bibr" coords="9,413.12,648.42,14.31,7.86" target="#b10">[10]</ref> describe a tool with a fisheye zooming algorithm which lets the user view a model with varying amounts of detail depending on the context. It has to be investigated whether it is possible to combine the fisheye zooming concept with the dimension-based navigation paradigm. While the KobrA 2.0 implementation of nAOMi heavily uses UML diagrams for developers, Glinz et al. use custom diagram types, e.g. for structural and behavioral views.</p><p>An approach which also emphasizes the description of formal consistency rules (correspondences) between views is RM-ODP <ref type="bibr" coords="10,96.75,99.48,18.84,7.86">[5][6]</ref>. However, this approach does not explicitly mention the notion of a SUM and thus implies that consistency rules should be defined in a pairwise fashion between individual pairs of views. ArchiMate <ref type="bibr" coords="10,231.48,130.86,9.20,7.86" target="#b7">[7]</ref>, which complements TOGAF <ref type="bibr" coords="10,131.56,141.32,13.49,7.86" target="#b12">[12]</ref>, is an enterprise architecture modeling language which offers two orthogonal "dimensions" for modeling, (business, architecture, and technology) layers and (informational, behavioral and structural ) aspects and also suggests two more dimensions, purpose and abstraction level. However, as many of these views span multiple choices of a single "dimension", the intuitive dimension-based navigation metaphor of OSM can not be easily applied. There are also more general approaches for view-based modeling but they are less specific in terms of consistency rules between views and provide little guidance on how to manage and navigate views, for example the Zachman Framework <ref type="bibr" coords="10,234.60,256.39,13.49,7.86" target="#b14">[14]</ref>.</p><p>Regarding the practical use of OSM environments in the future, the biggest challenge is developing appropriate SUM metamodels which can accommodate all the types of views and services that software engineers are accustomed to today. For this first prototypical SUM-based environment supporting the OSM approach we had a method at our disposal (KobrA) that already defined a full set of orthogonal UMLbased views. This allowed us to model the required SUM and view metamodels by simply adapting the UML metamodels, removing and adding model elements as needed.</p><p>In doing so we were able to manually ensure that the metamodels fulfilled the two core requirements of SUM-based environments -(1) being minimalistic and (2) redundancy free. If SUM-based software engineering environments are to take off, and to be introduced into existing, heterogeneous environments, more sophisticated ways of integrating existing metamodels into a single unified metamodel will be required.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,354.64,450.36,163.46,7.89;1,316.81,353.66,239.11,82.43"><head>Figure 1 :</head><label>1</label><figDesc>Figure 1: Orthographic Projection.</figDesc><graphic coords="1,316.81,353.66,239.11,82.43" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="2,87.76,257.43,434.17,7.89"><head>Figure 2 :</head><label>2</label><figDesc>Figure 2: Consistency Dependencies in Artifact-oriented versus View-oriented Environments.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="2,340.34,356.11,192.04,7.89"><head>Figure 3 :</head><label>3</label><figDesc>Figure 3: KobrA 2.0 Top Level Packages.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="3,221.66,530.87,166.39,7.89"><head>Figure 4 :</head><label>4</label><figDesc>Figure 4: KobrA 2.0 SUM Package.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="4,217.13,431.87,175.45,7.89"><head>Figure 5 :</head><label>5</label><figDesc>Figure 5: KobrA 2.0 Classes Package.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="5,202.06,551.11,205.59,7.89"><head>Figure 6 :</head><label>6</label><figDesc>Figure 6: KobrA 2.0 Views package nesting.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,214.72,309.82,180.27,7.89"><head>Figure 7 :</head><label>7</label><figDesc>Figure 7: Transformation abstractions.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="6,54.45,641.32,131.96,5.81;6,54.35,649.29,140.98,5.81;6,54.35,657.26,132.10,5.81;6,54.35,665.23,212.05,5.81;6,54.35,673.20,181.28,5.81;6,74.41,681.17,109.92,5.81;6,54.35,689.14,199.05,5.81;6,74.40,697.11,87.83,5.81;6,54.35,705.08,234.60,5.81;6,74.25,713.05,30.09,5.81;6,317.37,341.34,234.29,5.81;6,337.11,349.31,30.37,5.81;6,317.37,357.28,234.28,5.81;6,337.11,365.25,48.02,5.81;6,317.37,373.22,194.60,5.81;6,337.42,381.19,87.83,5.81"><head></head><label></label><figDesc>context A s s o c i a t i o n A b s t r a c t i o n inv : ve . memberEnd = se . memberEnd inv : ve . ownedEnd = se . ownedEnd ivn : ve . n av i g a b l eOwnedEnd = se . n av i g a bl e O w ne d E n d inv : se . oclIsKindOf ( Acquires ) implies ve . hasStereotype ( ' acquires ') inv : ve . hasStereotype ( ' acquires ') implies se . oclIsKindOf ( Aquires ) inv : se . oclIsKindOf ( Nests ) implies ve . hasStereotype ( ' nests ') inv : ve . hasStereotype ( ' nests ') implies se . oclIsKindOf ( Nests ) inv : se . oclIsKindOf ( Creates ) implies ve . hasStereotype ( ' creates ') inv : ve . hasStereotype ( ' creates ') implies se . oclIsKindOf ( Creates )</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="7,140.38,232.54,328.94,7.89"><head>Figure 8 :</head><label>8</label><figDesc>Figure 8: Transformation to the Specification Structural Service View.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="7,54.45,681.17,141.06,5.81;7,74.44,689.14,140.77,5.81;7,54.35,697.11,203.37,5.81;7,74.40,705.08,185.60,5.81;7,74.40,713.05,212.26,5.81;7,317.46,264.06,145.29,5.81;7,317.37,272.03,234.48,5.81;7,317.46,292.53,105.31,5.81;7,317.37,300.50,216.82,5.81;7,335.08,308.47,203.56,5.81;7,355.19,316.44,83.39,5.81;7,335.08,324.41,203.56,5.81;7,355.19,332.38,87.84,5.81;7,317.37,340.35,194.28,5.81;7,317.37,348.32,149.87,5.81;7,317.37,356.29,105.73,5.81;7,317.46,376.79,145.29,5.81;7,317.37,384.76,234.48,5.81;7,317.46,405.26,131.96,5.81;7,317.37,413.23,167.63,5.81;7,317.46,433.73,163.06,5.81;7,317.37,441.70,181.28,5.81"><head>context</head><label></label><figDesc>KobrA2 :: Views :: Subject :: S p e c i f i c a t i o n S t r u c t u r a l C l a s s T y p e inv : ownedMember -&gt; select ( oclIsKindOf ( Class ) or oclIsKindOf ( ' Enumeration ') or oclIsKindOf ( Association ) ) = subject -&gt; union ( subject . cbbTypes ) context C o m p o n e n t C l a s s A b s t r a c t i o n inv : se . isSubject implies ve . hasStereotype ( ' subject ') context Cl assA bs t ra c tion inv : not se . oclIsKindOf ( ComponentClass ) implies ( ve . ownedAttribute = se . ownedAttribute -&gt; select ( visibility =# public ) ve . ownedOperation = se . ownedOperation -&gt; select ( visibility =# public ) ) inv : ve . powe rtyp eExt ent = se . po wer type Exte nt inv : ve . superClass = se . superClass inv : ' ve . inv ' = ' se . inv ' context C o m p o n e n t C l a s s A b s t r a c t i o n inv : se . isSubject implies ve . hasStereotype ( ' subject ') context E n u m e r a t i o n A b s t r a c t i o n inv : ve . ownedLiteral = se . ownedLiteral context E n u m e r a t i o n L i t e r a l A b s t r a c t i o n inv : ve . specification = se . specification .</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12" coords="8,83.62,199.05,179.45,7.89;8,57.39,53.80,231.93,130.98"><head>Figure 9 :</head><label>9</label><figDesc>Figure 9: Dimension-based navigation.</figDesc><graphic coords="8,57.39,53.80,231.93,130.98" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="8,340.70,349.18,191.33,7.89;8,316.81,53.80,239.10,281.11"><head>Figure 10 :</head><label>10</label><figDesc>Figure 10: Specification Structural View.</figDesc><graphic coords="8,316.81,53.80,239.10,281.11" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_14" coords="9,189.76,212.28,230.18,7.89;9,129.12,53.80,351.48,144.21"><head>Figure 11 :</head><label>11</label><figDesc>Figure 11: addProduct() Operation Specification.</figDesc><graphic coords="9,129.12,53.80,351.48,144.21" type="bitmap" /></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15" coords="9,73.76,677.29,199.18,7.89;9,53.80,395.77,239.10,267.24"><head>Figure 12 :</head><label>12</label><figDesc>Figure 12: Specification Behavioral Model.</figDesc><graphic coords="9,53.80,395.77,239.10,267.24" type="bitmap" /></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,58.28,466.47,96.81,10.75" xml:id="b0">
+	<monogr>
+		<title/>
+		<author>
+			<persName coords=""><surname>References</surname></persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.59,481.75,186.89,7.86;10,72.59,492.21,198.19,7.86;10,72.59,502.67,220.30,7.86;10,72.59,513.13,201.76,7.86;10,72.59,523.59,199.95,7.86" xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Component-Based Product Line Engineering with UML</title>
+		<author>
+			<persName coords=""><forename type="first">C</forename><surname>Atkinson</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">J</forename><surname>Bayer</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">C</forename><surname>Bunse</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">E</forename><surname>Kamsties</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">O</forename><surname>Laitenberger</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">R</forename><surname>Laqua</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">D</forename><surname>Muthig</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">B</forename><surname>Paech</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">J</forename><surname>Wüst</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">J</forename><surname>Zettel</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001-11">November 2001</date>
+			<publisher>Addison Wesley</publisher>
+			<pubPlace>Reading, Massachusetts, USA</pubPlace>
+		</imprint>
+	</monogr>
+	<note>1st edition</note>
+</biblStruct>
+
+<biblStruct coords="10,72.59,535.05,207.08,7.86;10,72.59,545.51,180.68,7.86;10,72.59,555.97,199.06,7.86;10,72.59,566.43,202.05,7.86;10,335.61,57.64,190.59,7.86;10,335.61,68.10,208.08,7.86;10,335.61,78.56,20.95,7.86" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Orthographic Software Modeling: A Practical Approach to View-Based Development</title>
+		<author>
+			<persName coords=""><forename type="first">C</forename><surname>Atkinson</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">D</forename><surname>Stoll</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">P</forename><surname>Bostan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Evaluation of Novel Approaches to Software Engineering</title>
+		<meeting><address><addrLine>Berlin Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2010">2010</date>
+			<biblScope unit="volume">69</biblScope>
+			<biblScope unit="page" from="206" to="219" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,90.02,205.76,7.86;10,335.61,100.48,218.69,7.86;10,335.61,110.94,215.92,7.86;10,335.61,121.40,20.95,7.86" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Orthographic Service Modeling</title>
+		<author>
+			<persName coords=""><forename type="first">C</forename><surname>Atkinson</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">D</forename><surname>Stoll</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">C</forename><surname>Tunjic</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of 15th IEEE EDOC Conference Workshops (EDOCW)</title>
+		<meeting>15th IEEE EDOC Conference Workshops (EDOCW)<address><addrLine>Helsinki, Finland</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2011">2011</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,132.86,132.40,7.86;10,335.61,143.32,200.92,8.11" xml:id="b4">
+	<monogr>
+		<ptr target="http://wiki.eclipse.org/MDT-UML2Tools" />
+		<title level="m">Eclipse Foundation. UML2Tools</title>
+		<imprint>
+			<date type="published" when="2013">2013</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,154.77,210.72,7.86;10,335.61,165.23,187.88,7.86;10,335.61,175.70,125.37,7.86;10,335.61,186.80,117.46,7.47;10,335.61,197.26,199.89,7.47;10,335.61,207.08,20.95,7.86" xml:id="b5">
+	<monogr>
+		<author>
+			<persName coords=""><forename type="first">/</forename><surname>Iso</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">Itu-T ; Rm-Odp</forename><surname>Iec</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">Itu-T</forename><surname>Rec</surname></persName>
+		</author>
+		<idno>901-X.904 / ISO/IEC 10746</idno>
+		<ptr target="http://standards.iso.org/ittf/PubliclyAvailableStandards/index.html" />
+		<title level="m">The Reference Model of Open Distributed Processing</title>
+		<imprint>
+			<date type="published" when="1998">1998</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,218.53,215.59,7.86;10,335.61,229.00,216.20,7.86;10,335.61,239.46,198.56,7.86;10,335.61,249.92,211.80,7.86;10,335.61,260.38,123.62,7.86" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Realizing Correspondences in MultiViewpoint Specifications</title>
+		<author>
+			<persName coords=""><forename type="first">J</forename><forename type="middle">I J</forename><surname>Jose</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">Raul</forename><surname>Romero</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">A</forename><surname>Vallecillo</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Thirteenth IEEE International EDOC Conference</title>
+		<meeting>the Thirteenth IEEE International EDOC Conference<address><addrLine>Auckland, New Zealand</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2009-09-04">1 -4 September 2009. September 2009</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,271.83,193.10,7.86;10,335.61,282.30,133.93,7.86" xml:id="b7">
+	<monogr>
+		<title level="m" type="main">Enterprise Architecture at Work</title>
+		<author>
+			<persName coords=""><forename type="first">M</forename><surname>Lankhorst</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009">2009</date>
+			<publisher>Springer</publisher>
+			<pubPlace>Berlin Heidelberg</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,293.75,204.26,7.86;10,335.61,304.21,203.93,7.86;10,335.61,314.67,28.38,7.86;10,335.61,325.78,220.18,7.47;10,335.61,335.60,64.47,7.86" xml:id="b8">
+	<monogr>
+		<ptr target="http://www.omg.org/cgi-bin/doc?formal/07-11-02" />
+		<title level="m">OMG Unified Modeling Language (OMG UML), Superstructure, V2.1.2</title>
+		<imprint>
+			<date type="published" when="2007-11">November 2007</date>
+		</imprint>
+		<respStmt>
+			<orgName>Object Management Group</orgName>
+		</respStmt>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,347.05,200.62,7.86;10,335.61,357.51,220.31,7.86;10,335.61,367.97,219.51,8.11" xml:id="b9">
+	<monogr>
+		<title level="m" type="main">Meta Object Facility (MOF) 2.0 Query/View/Transformation</title>
+		<ptr target="http://www.omg.org/spec/QVT/1.0/PDF/" />
+		<imprint>
+			<date type="published" when="2008-04">April 2008</date>
+		</imprint>
+		<respStmt>
+			<orgName>Object Management Group (OMG)</orgName>
+		</respStmt>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,379.43,214.59,7.86;10,335.61,389.89,185.13,7.86;10,335.61,400.35,206.23,7.86;10,335.61,410.81,204.63,7.86;10,335.61,421.27,61.37,7.86" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">An effective layout adaptation technique for a graphical modeling tool</title>
+		<author>
+			<persName coords=""><forename type="first">C</forename><surname>Seybold</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">M</forename><surname>Glinz</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">S</forename><surname>Meier</surname></persName>
+		</author>
+		<author>
+			<persName coords=""><forename type="first">N</forename><surname>Merlo-Schett</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2003 International Conference on Software Engineering</title>
+		<meeting>the 2003 International Conference on Software Engineering<address><addrLine>Portland</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2003">2003</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,432.73,209.56,7.86;10,335.61,443.19,190.83,8.11" xml:id="b11">
+	<monogr>
+		<ptr target="http://www.eclipse.org/atl/" />
+		<title level="m">The Atlas Transformation Language (ATL). Official Website</title>
+		<imprint>
+			<date type="published" when="2013">2013</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,454.65,199.30,7.86;10,335.61,465.11,129.20,7.86;10,335.61,476.22,178.54,7.47;10,335.61,486.03,166.75,8.11" xml:id="b12">
+	<monogr>
+		<ptr target="http://www.opengroup.org/architecture/togaf9-doc/arch/index.html" />
+		<title level="m">TOGAF Version 9 -The Open Group Architecture Framework</title>
+		<imprint>
+			<date type="published" when="2009-02">Feb 2009</date>
+		</imprint>
+		<respStmt>
+			<orgName>The Open Group</orgName>
+		</respStmt>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,497.49,192.03,7.86;10,335.61,507.95,197.99,7.86;10,335.61,518.41,95.77,7.86;10,335.61,529.52,143.51,7.47" xml:id="b13">
+	<monogr>
+		<ptr target="http://eclipselabs.org/p/naomi" />
+		<title level="m">nAOMi -opeN, Adaptable, Orthographic Modeling EnvIronment</title>
+		<imprint/>
+		<respStmt>
+			<orgName>University of Mannheim -Software Engineering Group</orgName>
+		</respStmt>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,335.60,540.33,212.73,7.86;10,335.61,550.79,188.84,7.86;10,335.61,561.25,191.02,8.11" xml:id="b14">
+	<monogr>
+		<author>
+			<persName coords=""><forename type="first">J</forename><forename type="middle">A</forename><surname>Zachman</surname></persName>
+		</author>
+		<ptr target="http://www.zachmaninternational.com" />
+		<title level="m">The Zachman Framework: A Primer for Enterprise Engineering and Manufacturing</title>
+		<imprint>
+			<date type="published" when="2009">2009</date>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>
