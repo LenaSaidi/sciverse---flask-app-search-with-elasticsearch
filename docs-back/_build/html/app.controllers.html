@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.controllers package &mdash; Documentation sciverse-backend 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5cd26065"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=d99ca74e"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="config module" href="config.html" />
+    <link rel="prev" title="app package" href="app.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            sciverse-backend
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">sciverse—flask-app-search-with-elasticsearch-2</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="JsonGnr.html">JsonGnr module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="app.html">app package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="app.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">app.controllers package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#module-app.config">app.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#module-app.elasticsearch">app.elasticsearch module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#module-app.forms">app.forms module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#module-app.models">app.models module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#module-app.routes">app.routes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#module-app.utils">app.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#module-app.views">app.views module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#module-app">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init_db.html">init_db module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tempCodeRunnerFile.html">tempCodeRunnerFile module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sciverse-backend</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">sciverse—flask-app-search-with-elasticsearch-2</a></li>
+          <li class="breadcrumb-item"><a href="app.html">app package</a></li>
+      <li class="breadcrumb-item active">app.controllers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/app.controllers.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="app-controllers-package">
+<h1>app.controllers package<a class="headerlink" href="#app-controllers-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-app.controllers.admin_controller">
+<span id="app-controllers-admin-controller-module"></span><h2>app.controllers.admin_controller module<a class="headerlink" href="#module-app.controllers.admin_controller" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.admin_controller.create_admin">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.admin_controller.</span></span><span class="sig-name descname"><span class="pre">create_admin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/admin_controller.html#create_admin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.admin_controller.create_admin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.admin_controller.get_admins">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.admin_controller.</span></span><span class="sig-name descname"><span class="pre">get_admins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/admin_controller.html#get_admins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.admin_controller.get_admins" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.controllers.article_controller">
+<span id="app-controllers-article-controller-module"></span><h2>app.controllers.article_controller module<a class="headerlink" href="#module-app.controllers.article_controller" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.add_article">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">add_article</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#add_article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.add_article" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.delete_article">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">delete_article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#delete_article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.delete_article" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.edit_article">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">edit_article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#edit_article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.edit_article" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.get_all_articles">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">get_all_articles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#get_all_articles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.get_all_articles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.get_all_articles_from_elasticsearch">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">get_all_articles_from_elasticsearch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#get_all_articles_from_elasticsearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.get_all_articles_from_elasticsearch" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.get_article">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">get_article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#get_article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.get_article" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.get_article_edits">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">get_article_edits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#get_article_edits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.get_article_edits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.get_article_from_elasticsearch">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">get_article_from_elasticsearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#get_article_from_elasticsearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.get_article_from_elasticsearch" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.get_articles">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">get_articles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#get_articles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.get_articles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.article_controller.get_db_article_id">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.article_controller.</span></span><span class="sig-name descname"><span class="pre">get_db_article_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">es_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/article_controller.html#get_db_article_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.article_controller.get_db_article_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.controllers.auth_controller">
+<span id="app-controllers-auth-controller-module"></span><h2>app.controllers.auth_controller module<a class="headerlink" href="#module-app.controllers.auth_controller" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.auth_controller.protected">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.auth_controller.</span></span><span class="sig-name descname"><span class="pre">protected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/auth_controller.html#protected"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.auth_controller.protected" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.auth_controller.signin">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.auth_controller.</span></span><span class="sig-name descname"><span class="pre">signin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/auth_controller.html#signin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.auth_controller.signin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.auth_controller.signout">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.auth_controller.</span></span><span class="sig-name descname"><span class="pre">signout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/auth_controller.html#signout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.auth_controller.signout" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.auth_controller.signup">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.auth_controller.</span></span><span class="sig-name descname"><span class="pre">signup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/auth_controller.html#signup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.auth_controller.signup" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.controllers.favorite_controller">
+<span id="app-controllers-favorite-controller-module"></span><h2>app.controllers.favorite_controller module<a class="headerlink" href="#module-app.controllers.favorite_controller" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.favorite_controller.add_to_favorites">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.favorite_controller.</span></span><span class="sig-name descname"><span class="pre">add_to_favorites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/favorite_controller.html#add_to_favorites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.favorite_controller.add_to_favorites" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.favorite_controller.get_favorite_articles">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.favorite_controller.</span></span><span class="sig-name descname"><span class="pre">get_favorite_articles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/favorite_controller.html#get_favorite_articles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.favorite_controller.get_favorite_articles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.favorite_controller.remove_from_favorites">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.favorite_controller.</span></span><span class="sig-name descname"><span class="pre">remove_from_favorites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/favorite_controller.html#remove_from_favorites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.favorite_controller.remove_from_favorites" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.controllers.moderator_controller">
+<span id="app-controllers-moderator-controller-module"></span><h2>app.controllers.moderator_controller module<a class="headerlink" href="#module-app.controllers.moderator_controller" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.moderator_controller.create_moderator">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.moderator_controller.</span></span><span class="sig-name descname"><span class="pre">create_moderator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/moderator_controller.html#create_moderator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.moderator_controller.create_moderator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.moderator_controller.get_moderators">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.moderator_controller.</span></span><span class="sig-name descname"><span class="pre">get_moderators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/moderator_controller.html#get_moderators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.moderator_controller.get_moderators" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.controllers.user_controller">
+<span id="app-controllers-user-controller-module"></span><h2>app.controllers.user_controller module<a class="headerlink" href="#module-app.controllers.user_controller" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.user_controller.delete_user">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.user_controller.</span></span><span class="sig-name descname"><span class="pre">delete_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/user_controller.html#delete_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.user_controller.delete_user" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.user_controller.get_user">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.user_controller.</span></span><span class="sig-name descname"><span class="pre">get_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/user_controller.html#get_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.user_controller.get_user" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.user_controller.get_users">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.user_controller.</span></span><span class="sig-name descname"><span class="pre">get_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/user_controller.html#get_users"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.user_controller.get_users" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.controllers.user_controller.update_user">
+<span class="sig-prename descclassname"><span class="pre">app.controllers.user_controller.</span></span><span class="sig-name descname"><span class="pre">update_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/controllers/user_controller.html#update_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.controllers.user_controller.update_user" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.controllers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.controllers" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="app.html" class="btn btn-neutral float-left" title="app package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="config.html" class="btn btn-neutral float-right" title="config module" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2024, AchrafEddineBoudiaf.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

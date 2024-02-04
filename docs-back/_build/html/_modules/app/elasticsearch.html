@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.elasticsearch &mdash; Documentation sciverse-backend 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5cd26065"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/translations.js?v=d99ca74e"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Recherche" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            sciverse-backend
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">sciverse—flask-app-search-with-elasticsearch-2</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">sciverse-backend</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Code du module</a></li>
+      <li class="breadcrumb-item active">app.elasticsearch</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Code source de app.elasticsearch</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">es</span>
+<span class="kn">from</span> <span class="nn">flask_jwt_extended</span> <span class="kn">import</span> <span class="n">jwt_required</span><span class="p">,</span> <span class="n">get_jwt_identity</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">Article</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="n">ArticleElasticsearchMapping</span>
+
+
+
+<div class="viewcode-block" id="search_article">
+<a class="viewcode-back" href="../../app.html#app.elasticsearch.search_article">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">search_article</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span> <span class="ow">or</span> <span class="s1">&#39;queries&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Invalid request data.&quot;</span><span class="p">}),</span> <span class="mi">400</span>
+
+    <span class="n">queries</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;queries&#39;</span><span class="p">]</span>
+    <span class="n">must_conditions</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># For each term and field specified by the user</span>
+    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;term&#39;</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;field&#39;</span><span class="p">)</span>
+        <span class="c1"># If the field is &quot;authors&quot;, we need to handle it differently</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s1">&#39;authors&#39;</span><span class="p">:</span>
+            <span class="c1"># Search for the term in author names and institution names</span>
+            <span class="n">must_conditions</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;bool&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;should&#39;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span><span class="s1">&#39;match&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;authors.name&#39;</span><span class="p">:</span> <span class="n">term</span><span class="p">}},</span>
+                        <span class="p">{</span><span class="s1">&#39;match&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;authors.institutions.institution_name&#39;</span><span class="p">:</span> <span class="n">term</span><span class="p">}}</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If it&#39;s not &quot;authors&quot;</span>
+            <span class="n">must_conditions</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;multi_match&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">term</span><span class="p">,</span>
+                    <span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">field</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+
+        <span class="c1"># Get IDs of favorite articles for the user</span>
+        <span class="n">favorite_article_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">article</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">user</span><span class="o">.</span><span class="n">favorite_articles</span><span class="p">}</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;articles_index&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;bool&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;must&#39;</span><span class="p">:</span> <span class="n">must_conditions</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">})</span>
+
+        <span class="n">hits</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;hits&#39;</span><span class="p">][</span><span class="s1">&#39;hits&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">hits</span><span class="p">:</span>
+            <span class="n">articles_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+                <span class="n">article_source</span> <span class="o">=</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">]</span>
+                <span class="n">article_id</span> <span class="o">=</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+                <span class="c1"># Fetch article ID from your database</span>
+                <span class="n">db_article_id</span> <span class="o">=</span> <span class="n">get_db_article_id</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">db_article_id</span><span class="p">:</span>
+                    <span class="c1"># Check if the article is a favorite</span>
+                    <span class="n">is_favorite</span> <span class="o">=</span> <span class="n">db_article_id</span> <span class="ow">in</span> <span class="n">favorite_article_ids</span>
+                    <span class="n">article_data</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;db_id&#39;</span><span class="p">:</span> <span class="n">db_article_id</span><span class="p">,</span>
+                        <span class="s1">&#39;es_id&#39;</span><span class="p">:</span> <span class="n">article_id</span><span class="p">,</span>
+                        <span class="s1">&#39;is_favorite&#39;</span><span class="p">:</span> <span class="n">is_favorite</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">article_source</span>
+                    <span class="p">}</span>
+                    <span class="n">articles_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article_data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;articles&quot;</span><span class="p">:</span> <span class="n">articles_data</span><span class="p">}),</span> <span class="mi">200</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;No articles found matching the specified criteria.&quot;</span><span class="p">}),</span> <span class="mi">404</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Search failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}),</span> <span class="mi">500</span></div>
+
+
+<div class="viewcode-block" id="get_db_article_id">
+<a class="viewcode-back" href="../../app.html#app.elasticsearch.get_db_article_id">[docs]</a>
+<span class="k">def</span> <span class="nf">get_db_article_id</span><span class="p">(</span><span class="n">es_id</span><span class="p">):</span>
+    <span class="c1"># Implement logic to retrieve article ID from your database based on Elasticsearch ID</span>
+    <span class="c1"># This could involve querying your database or using a mapping between Elasticsearch and database IDs</span>
+    <span class="c1"># For simplicity, let&#39;s assume a direct mapping for now</span>
+    <span class="n">mapping_entry</span> <span class="o">=</span> <span class="n">ArticleElasticsearchMapping</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">elasticsearch_id</span><span class="o">=</span><span class="n">es_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">mapping_entry</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mapping_entry</span><span class="o">.</span><span class="n">article_id</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2024, AchrafEddineBoudiaf.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app package &mdash; Documentation sciverse-backend 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5cd26065"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=d99ca74e"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="app.controllers package" href="app.controllers.html" />
+    <link rel="prev" title="JsonGnr module" href="JsonGnr.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            sciverse-backend
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">sciverse—flask-app-search-with-elasticsearch-2</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="JsonGnr.html">JsonGnr module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">app package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html">app.controllers package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.config">app.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.elasticsearch">app.elasticsearch module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.elasticsearch.get_db_article_id"><code class="docutils literal notranslate"><span class="pre">get_db_article_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.elasticsearch.search_article"><code class="docutils literal notranslate"><span class="pre">search_article()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.forms">app.forms module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.models">app.models module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.Article"><code class="docutils literal notranslate"><span class="pre">Article</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.ArticleAuthor"><code class="docutils literal notranslate"><span class="pre">ArticleAuthor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.ArticleEdit"><code class="docutils literal notranslate"><span class="pre">ArticleEdit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.ArticleElasticsearchMapping"><code class="docutils literal notranslate"><span class="pre">ArticleElasticsearchMapping</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.ArticleKeyword"><code class="docutils literal notranslate"><span class="pre">ArticleKeyword</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.ArticleReference"><code class="docutils literal notranslate"><span class="pre">ArticleReference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.Author"><code class="docutils literal notranslate"><span class="pre">Author</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.AuthorInstitution"><code class="docutils literal notranslate"><span class="pre">AuthorInstitution</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.BibliographicReference"><code class="docutils literal notranslate"><span class="pre">BibliographicReference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.FavoriteArticle"><code class="docutils literal notranslate"><span class="pre">FavoriteArticle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.Institution"><code class="docutils literal notranslate"><span class="pre">Institution</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.Keyword"><code class="docutils literal notranslate"><span class="pre">Keyword</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.routes">app.routes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.utils">app.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.views">app.views module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init_db.html">init_db module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tempCodeRunnerFile.html">tempCodeRunnerFile module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sciverse-backend</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">sciverse—flask-app-search-with-elasticsearch-2</a></li>
+      <li class="breadcrumb-item active">app package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/app.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="app-package">
+<h1>app package<a class="headerlink" href="#app-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="app.controllers.html">app.controllers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app.controllers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.controllers.html#module-app.controllers.admin_controller">app.controllers.admin_controller module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.admin_controller.create_admin"><code class="docutils literal notranslate"><span class="pre">create_admin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.admin_controller.get_admins"><code class="docutils literal notranslate"><span class="pre">get_admins()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.controllers.html#module-app.controllers.article_controller">app.controllers.article_controller module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.add_article"><code class="docutils literal notranslate"><span class="pre">add_article()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.delete_article"><code class="docutils literal notranslate"><span class="pre">delete_article()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.edit_article"><code class="docutils literal notranslate"><span class="pre">edit_article()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.get_all_articles"><code class="docutils literal notranslate"><span class="pre">get_all_articles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.get_all_articles_from_elasticsearch"><code class="docutils literal notranslate"><span class="pre">get_all_articles_from_elasticsearch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.get_article"><code class="docutils literal notranslate"><span class="pre">get_article()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.get_article_edits"><code class="docutils literal notranslate"><span class="pre">get_article_edits()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.get_article_from_elasticsearch"><code class="docutils literal notranslate"><span class="pre">get_article_from_elasticsearch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.get_articles"><code class="docutils literal notranslate"><span class="pre">get_articles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.article_controller.get_db_article_id"><code class="docutils literal notranslate"><span class="pre">get_db_article_id()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.controllers.html#module-app.controllers.auth_controller">app.controllers.auth_controller module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.auth_controller.protected"><code class="docutils literal notranslate"><span class="pre">protected()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.auth_controller.signin"><code class="docutils literal notranslate"><span class="pre">signin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.auth_controller.signout"><code class="docutils literal notranslate"><span class="pre">signout()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.auth_controller.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.controllers.html#module-app.controllers.favorite_controller">app.controllers.favorite_controller module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.favorite_controller.add_to_favorites"><code class="docutils literal notranslate"><span class="pre">add_to_favorites()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.favorite_controller.get_favorite_articles"><code class="docutils literal notranslate"><span class="pre">get_favorite_articles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.favorite_controller.remove_from_favorites"><code class="docutils literal notranslate"><span class="pre">remove_from_favorites()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.controllers.html#module-app.controllers.moderator_controller">app.controllers.moderator_controller module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.moderator_controller.create_moderator"><code class="docutils literal notranslate"><span class="pre">create_moderator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.moderator_controller.get_moderators"><code class="docutils literal notranslate"><span class="pre">get_moderators()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.controllers.html#module-app.controllers.user_controller">app.controllers.user_controller module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.user_controller.delete_user"><code class="docutils literal notranslate"><span class="pre">delete_user()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.user_controller.get_user"><code class="docutils literal notranslate"><span class="pre">get_user()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.user_controller.get_users"><code class="docutils literal notranslate"><span class="pre">get_users()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html#app.controllers.user_controller.update_user"><code class="docutils literal notranslate"><span class="pre">update_user()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.controllers.html#module-app.controllers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-app.config">
+<span id="app-config-module"></span><h2>app.config module<a class="headerlink" href="#module-app.config" title="Link to this heading"></a></h2>
+</section>
+<section id="module-app.elasticsearch">
+<span id="app-elasticsearch-module"></span><h2>app.elasticsearch module<a class="headerlink" href="#module-app.elasticsearch" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.elasticsearch.get_db_article_id">
+<span class="sig-prename descclassname"><span class="pre">app.elasticsearch.</span></span><span class="sig-name descname"><span class="pre">get_db_article_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">es_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/elasticsearch.html#get_db_article_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.elasticsearch.get_db_article_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.elasticsearch.search_article">
+<span class="sig-prename descclassname"><span class="pre">app.elasticsearch.</span></span><span class="sig-name descname"><span class="pre">search_article</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/elasticsearch.html#search_article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.elasticsearch.search_article" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.forms">
+<span id="app-forms-module"></span><h2>app.forms module<a class="headerlink" href="#module-app.forms" title="Link to this heading"></a></h2>
+</section>
+<section id="module-app.models">
+<span id="app-models-module"></span><h2>app.models module<a class="headerlink" href="#module-app.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.Article">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">Article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#Article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.Article" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.abstract">
+<span class="sig-name descname"><span class="pre">abstract</span></span><a class="headerlink" href="#app.models.Article.abstract" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.article_edits">
+<span class="sig-name descname"><span class="pre">article_edits</span></span><a class="headerlink" href="#app.models.Article.article_edits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.article_elasticsearch_mapping">
+<span class="sig-name descname"><span class="pre">article_elasticsearch_mapping</span></span><a class="headerlink" href="#app.models.Article.article_elasticsearch_mapping" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.authors">
+<span class="sig-name descname"><span class="pre">authors</span></span><a class="headerlink" href="#app.models.Article.authors" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.date">
+<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#app.models.Article.date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.full_text">
+<span class="sig-name descname"><span class="pre">full_text</span></span><a class="headerlink" href="#app.models.Article.full_text" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.Article.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.keywords">
+<span class="sig-name descname"><span class="pre">keywords</span></span><a class="headerlink" href="#app.models.Article.keywords" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.pdf_url">
+<span class="sig-name descname"><span class="pre">pdf_url</span></span><a class="headerlink" href="#app.models.Article.pdf_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.Article.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.references">
+<span class="sig-name descname"><span class="pre">references</span></span><a class="headerlink" href="#app.models.Article.references" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Article.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#app.models.Article.title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.ArticleAuthor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">ArticleAuthor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#ArticleAuthor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.ArticleAuthor" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleAuthor.article_id">
+<span class="sig-name descname"><span class="pre">article_id</span></span><a class="headerlink" href="#app.models.ArticleAuthor.article_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleAuthor.author_id">
+<span class="sig-name descname"><span class="pre">author_id</span></span><a class="headerlink" href="#app.models.ArticleAuthor.author_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleAuthor.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.ArticleAuthor.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleAuthor.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.ArticleAuthor.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.ArticleEdit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">ArticleEdit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#ArticleEdit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.ArticleEdit" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleEdit.article_id">
+<span class="sig-name descname"><span class="pre">article_id</span></span><a class="headerlink" href="#app.models.ArticleEdit.article_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleEdit.edited_at">
+<span class="sig-name descname"><span class="pre">edited_at</span></span><a class="headerlink" href="#app.models.ArticleEdit.edited_at" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleEdit.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.ArticleEdit.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleEdit.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.ArticleEdit.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleEdit.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#app.models.ArticleEdit.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.ArticleElasticsearchMapping">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">ArticleElasticsearchMapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#ArticleElasticsearchMapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.ArticleElasticsearchMapping" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleElasticsearchMapping.article_id">
+<span class="sig-name descname"><span class="pre">article_id</span></span><a class="headerlink" href="#app.models.ArticleElasticsearchMapping.article_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleElasticsearchMapping.elasticsearch_id">
+<span class="sig-name descname"><span class="pre">elasticsearch_id</span></span><a class="headerlink" href="#app.models.ArticleElasticsearchMapping.elasticsearch_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleElasticsearchMapping.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.ArticleElasticsearchMapping.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleElasticsearchMapping.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.ArticleElasticsearchMapping.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.ArticleKeyword">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">ArticleKeyword</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#ArticleKeyword"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.ArticleKeyword" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleKeyword.article_id">
+<span class="sig-name descname"><span class="pre">article_id</span></span><a class="headerlink" href="#app.models.ArticleKeyword.article_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleKeyword.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.ArticleKeyword.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleKeyword.keyword_id">
+<span class="sig-name descname"><span class="pre">keyword_id</span></span><a class="headerlink" href="#app.models.ArticleKeyword.keyword_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleKeyword.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.ArticleKeyword.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.ArticleReference">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">ArticleReference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#ArticleReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.ArticleReference" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleReference.article_id">
+<span class="sig-name descname"><span class="pre">article_id</span></span><a class="headerlink" href="#app.models.ArticleReference.article_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleReference.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.ArticleReference.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleReference.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.ArticleReference.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.ArticleReference.reference_id">
+<span class="sig-name descname"><span class="pre">reference_id</span></span><a class="headerlink" href="#app.models.ArticleReference.reference_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.Author">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">Author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#Author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.Author" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Author.email">
+<span class="sig-name descname"><span class="pre">email</span></span><a class="headerlink" href="#app.models.Author.email" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Author.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.Author.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Author.institutions">
+<span class="sig-name descname"><span class="pre">institutions</span></span><a class="headerlink" href="#app.models.Author.institutions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Author.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#app.models.Author.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Author.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.Author.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.AuthorInstitution">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">AuthorInstitution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#AuthorInstitution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.AuthorInstitution" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.AuthorInstitution.author_id">
+<span class="sig-name descname"><span class="pre">author_id</span></span><a class="headerlink" href="#app.models.AuthorInstitution.author_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.AuthorInstitution.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.AuthorInstitution.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.AuthorInstitution.institution_id">
+<span class="sig-name descname"><span class="pre">institution_id</span></span><a class="headerlink" href="#app.models.AuthorInstitution.institution_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.AuthorInstitution.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.AuthorInstitution.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.BibliographicReference">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">BibliographicReference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#BibliographicReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.BibliographicReference" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.BibliographicReference.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.BibliographicReference.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.BibliographicReference.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.BibliographicReference.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.BibliographicReference.reference">
+<span class="sig-name descname"><span class="pre">reference</span></span><a class="headerlink" href="#app.models.BibliographicReference.reference" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.FavoriteArticle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">FavoriteArticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#FavoriteArticle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.FavoriteArticle" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.FavoriteArticle.article_id">
+<span class="sig-name descname"><span class="pre">article_id</span></span><a class="headerlink" href="#app.models.FavoriteArticle.article_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.FavoriteArticle.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.FavoriteArticle.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.FavoriteArticle.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.FavoriteArticle.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.FavoriteArticle.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#app.models.FavoriteArticle.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.Institution">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">Institution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#Institution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.Institution" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Institution.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.Institution.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Institution.institution_name">
+<span class="sig-name descname"><span class="pre">institution_name</span></span><a class="headerlink" href="#app.models.Institution.institution_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Institution.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.Institution.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.Keyword">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">Keyword</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#Keyword"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.Keyword" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Keyword.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.models.Keyword.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Keyword.keyword">
+<span class="sig-name descname"><span class="pre">keyword</span></span><a class="headerlink" href="#app.models.Keyword.keyword" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.Keyword.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.Keyword.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.models.User">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#User"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.models.User" title="Link to this definition"></a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.email">
+<span class="sig-name descname"><span class="pre">email</span></span><a class="headerlink" href="#app.models.User.email" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.favorite_articles">
+<span class="sig-name descname"><span class="pre">favorite_articles</span></span><a class="headerlink" href="#app.models.User.favorite_articles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.firstName">
+<span class="sig-name descname"><span class="pre">firstName</span></span><a class="headerlink" href="#app.models.User.firstName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.lastName">
+<span class="sig-name descname"><span class="pre">lastName</span></span><a class="headerlink" href="#app.models.User.lastName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.nature">
+<span class="sig-name descname"><span class="pre">nature</span></span><a class="headerlink" href="#app.models.User.nature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.password_hash">
+<span class="sig-name descname"><span class="pre">password_hash</span></span><a class="headerlink" href="#app.models.User.password_hash" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.models.User.query" title="Link to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Avertissement</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.role">
+<span class="sig-name descname"><span class="pre">role</span></span><a class="headerlink" href="#app.models.User.role" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#app.models.User.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-app.routes">
+<span id="app-routes-module"></span><h2>app.routes module<a class="headerlink" href="#module-app.routes" title="Link to this heading"></a></h2>
+</section>
+<section id="module-app.utils">
+<span id="app-utils-module"></span><h2>app.utils module<a class="headerlink" href="#module-app.utils" title="Link to this heading"></a></h2>
+</section>
+<section id="module-app.views">
+<span id="app-views-module"></span><h2>app.views module<a class="headerlink" href="#module-app.views" title="Link to this heading"></a></h2>
+</section>
+<section id="module-app">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="JsonGnr.html" class="btn btn-neutral float-left" title="JsonGnr module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="app.controllers.html" class="btn btn-neutral float-right" title="app.controllers package" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2024, AchrafEddineBoudiaf.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
