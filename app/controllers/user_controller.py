@@ -1,6 +1,6 @@
 # app/controllers/user_controller.py
 
-from flask import jsonify, request
+from flask import jsonify, request, session
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
 from flask_login import login_manager, LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -53,6 +53,7 @@ def get_user(user_id):
 @jwt_required()
 def update_user(user_id):
     user = User.query.get(user_id)
+    # user = session.get(User, user_id)
     if not user:
         return jsonify({'error': 'User not found'}), 404
 
