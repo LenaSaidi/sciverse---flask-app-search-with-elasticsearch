@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.controllers.article_controller &mdash; Documentation sciverse-backend 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5cd26065"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/translations.js?v=d99ca74e"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Recherche" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sciverse-backend
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">sciverse—flask-app-search-with-elasticsearch-2</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sciverse-backend</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Code du module</a></li>
+      <li class="breadcrumb-item active">app.controllers.article_controller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Code source de app.controllers.article_controller</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">jsonify</span>
+<span class="kn">from</span> <span class="nn">flask_jwt_extended</span> <span class="kn">import</span> <span class="n">current_user</span><span class="p">,</span> <span class="n">get_jwt_identity</span>
+<span class="kn">from</span> <span class="nn">flask_jwt_extended</span> <span class="kn">import</span> <span class="n">jwt_required</span><span class="p">,</span> <span class="n">unset_jwt_cookies</span>
+<span class="kn">from</span> <span class="nn">flask_login</span> <span class="kn">import</span> <span class="n">login_manager</span><span class="p">,</span> <span class="n">LoginManager</span><span class="p">,</span> <span class="n">UserMixin</span><span class="p">,</span> <span class="n">login_user</span><span class="p">,</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">logout_user</span><span class="p">,</span> <span class="n">current_user</span>
+<span class="kn">from</span> <span class="nn">werkzeug.security</span> <span class="kn">import</span> <span class="n">generate_password_hash</span><span class="p">,</span> <span class="n">check_password_hash</span>
+<span class="kn">from</span> <span class="nn">flask_sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemy</span>
+<span class="kn">from</span> <span class="nn">flask_migrate</span> <span class="kn">import</span> <span class="n">Migrate</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span> <span class="nn">app.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">login_manager</span>
+<span class="kn">from</span> <span class="nn">elasticsearch</span> <span class="kn">import</span> <span class="n">Elasticsearch</span><span class="p">,</span> <span class="n">NotFoundError</span>
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">es</span>
+
+
+
+    <span class="c1">#------------------------------------ SQL  GET-------------------------------------</span>
+
+
+<span class="c1">#get one article from sql</span>
+<div class="viewcode-block" id="get_article">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.get_article">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get_article</span><span class="p">(</span><span class="n">article_id</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">article</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Article not found&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+
+    <span class="c1"># Example: Extracting author details </span>
+    <span class="n">authors</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">email</span><span class="p">}</span> <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">authors</span><span class="p">]</span>
+
+    <span class="c1"># Example: Extracting keyword details </span>
+    <span class="n">keywords</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">keyword</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;keyword&#39;</span><span class="p">:</span> <span class="n">keyword</span><span class="o">.</span><span class="n">keyword</span><span class="p">}</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">keywords</span><span class="p">]</span>
+
+    <span class="c1"># Example: Extracting reference details</span>
+    <span class="n">references</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">reference</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;reference&#39;</span><span class="p">:</span> <span class="n">reference</span><span class="o">.</span><span class="n">reference</span><span class="p">}</span> <span class="k">for</span> <span class="n">reference</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">references</span><span class="p">]</span>
+
+    <span class="n">article_data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+        <span class="s1">&#39;abstract&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">abstract</span><span class="p">,</span>
+        <span class="s1">&#39;full_text&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">full_text</span><span class="p">,</span>
+        <span class="s1">&#39;pdf_url&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">pdf_url</span><span class="p">,</span>
+        <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="s1">&#39;authors&#39;</span><span class="p">:</span> <span class="n">authors</span><span class="p">,</span>
+        <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="n">keywords</span><span class="p">,</span>
+        <span class="s1">&#39;references&#39;</span><span class="p">:</span> <span class="n">references</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">})</span></div>
+
+
+
+
+<span class="c1">#get articles with fav of a specific user</span>
+<div class="viewcode-block" id="get_articles">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.get_articles">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get_articles</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Get the user ID from the JWT token</span>
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+
+        <span class="c1"># Query the user</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+
+        <span class="c1"># Query all articles with favorite information</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="c1"># Create a response containing articles with a boolean indicating if it&#39;s a favorite</span>
+        <span class="n">response_articles</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                <span class="s1">&#39;abstract&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">abstract</span><span class="p">,</span>
+                <span class="s1">&#39;full_text&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">full_text</span><span class="p">,</span>
+                <span class="s1">&#39;pdf_url&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">pdf_url</span><span class="p">,</span>
+                <span class="s1">&#39;is_favorite&#39;</span><span class="p">:</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">user</span><span class="o">.</span><span class="n">favorite_articles</span><span class="p">,</span>
+                <span class="s1">&#39;authors&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">email</span><span class="p">}</span> <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">authors</span><span class="p">],</span>
+                <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">keyword</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;keyword&#39;</span><span class="p">:</span> <span class="n">keyword</span><span class="o">.</span><span class="n">keyword</span><span class="p">}</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">keywords</span><span class="p">],</span>
+                <span class="s1">&#39;references&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">reference</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;reference&#39;</span><span class="p">:</span> <span class="n">reference</span><span class="o">.</span><span class="n">reference</span><span class="p">}</span> <span class="k">for</span> <span class="n">reference</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">references</span><span class="p">],</span>
+                <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+                
+
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;articles&#39;</span><span class="p">:</span> <span class="n">response_articles</span><span class="p">}),</span> <span class="mi">200</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+    
+
+<span class="c1">#get all articles from sql	</span>
+<div class="viewcode-block" id="get_all_articles">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.get_all_articles">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get_all_articles</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="n">response_articles</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                <span class="s1">&#39;abstract&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">abstract</span><span class="p">,</span>
+                <span class="s1">&#39;full_text&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">full_text</span><span class="p">,</span>
+                <span class="s1">&#39;pdf_url&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">pdf_url</span><span class="p">,</span>
+                <span class="s1">&#39;authors&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">email</span><span class="p">}</span> <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">authors</span><span class="p">],</span>
+                <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">keyword</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;keyword&#39;</span><span class="p">:</span> <span class="n">keyword</span><span class="o">.</span><span class="n">keyword</span><span class="p">}</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">keywords</span><span class="p">],</span>
+                <span class="s1">&#39;references&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">reference</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;reference&#39;</span><span class="p">:</span> <span class="n">reference</span><span class="o">.</span><span class="n">reference</span><span class="p">}</span> <span class="k">for</span> <span class="n">reference</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">references</span><span class="p">],</span>
+                <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;articles&#39;</span><span class="p">:</span> <span class="n">response_articles</span><span class="p">}),</span> <span class="mi">200</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+    
+
+
+    <span class="c1">#------------------------------------ ADD PUT DELETE-------------------------------------</span>
+
+<span class="c1">#add article</span>
+<div class="viewcode-block" id="add_article">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.add_article">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">add_article</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span>
+    <span class="n">current_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>  <span class="c1"># Utilisez datetime.now() si vous préférez l&#39;heure locale</span>
+
+    <span class="n">new_article</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">),</span>
+        <span class="n">abstract</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">),</span>
+        <span class="n">full_text</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;full_text&#39;</span><span class="p">),</span>
+        <span class="n">pdf_url</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pdf_url&#39;</span><span class="p">),</span>
+        <span class="n">date</span><span class="o">=</span><span class="n">current_date</span>
+    <span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_article</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">author_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="n">Author</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">author_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span>
+            <span class="n">email</span><span class="o">=</span><span class="n">author_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+        <span class="n">relation</span> <span class="o">=</span> <span class="n">ArticleAuthor</span><span class="p">(</span><span class="n">article_id</span><span class="o">=</span><span class="n">new_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">author_id</span><span class="o">=</span><span class="n">author</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">institution_data</span> <span class="ow">in</span> <span class="n">author_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;institutions&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">institution</span> <span class="o">=</span> <span class="n">Institution</span><span class="p">(</span><span class="n">institution_name</span><span class="o">=</span><span class="n">institution_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;institution_name&#39;</span><span class="p">))</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">institution</span><span class="p">)</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+            <span class="n">author_institution</span> <span class="o">=</span> <span class="n">AuthorInstitution</span><span class="p">(</span><span class="n">author_id</span><span class="o">=</span><span class="n">author</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">institution_id</span><span class="o">=</span><span class="n">institution</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">author_institution</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">keyword_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keywords&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">keyword</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="n">keyword</span><span class="o">=</span><span class="n">keyword_data</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+        <span class="n">relation</span> <span class="o">=</span> <span class="n">ArticleKeyword</span><span class="p">(</span><span class="n">article_id</span><span class="o">=</span><span class="n">new_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">keyword_id</span><span class="o">=</span><span class="n">keyword</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">reference_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;references&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">reference</span> <span class="o">=</span> <span class="n">BibliographicReference</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">reference_data</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+        <span class="n">relation</span> <span class="o">=</span> <span class="n">ArticleReference</span><span class="p">(</span><span class="n">article_id</span><span class="o">=</span><span class="n">new_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">reference_id</span><span class="o">=</span><span class="n">reference</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relation</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        
+        <span class="c1"># Si la base de données est mise à jour avec succès, essayez d&#39;indexer l&#39;article dans Elasticsearch</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;articles_index&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                <span class="s2">&quot;abstract&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                <span class="s2">&quot;full_text&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;full_text&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                <span class="s2">&quot;keywords&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keywords&#39;</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="s2">&quot;pdf_url&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pdf_url&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                <span class="s2">&quot;references&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;references&#39;</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                <span class="s2">&quot;authors&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="s2">&quot;institution_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">inst</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;institution_name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">author</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;institutions&#39;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;institution_name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)]</span>
+                <span class="c1"># Vous pouvez ajouter d&#39;autres champs si nécessaire</span>
+            <span class="p">})</span>
+            <span class="n">elasticsearch_id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Ajoutez une entrée dans la table de correspondance</span>
+            <span class="n">mapping_entry</span> <span class="o">=</span> <span class="n">ArticleElasticsearchMapping</span><span class="p">(</span><span class="n">article_id</span><span class="o">=</span><span class="n">new_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">elasticsearch_id</span><span class="o">=</span><span class="n">elasticsearch_id</span><span class="p">)</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mapping_entry</span><span class="p">)</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Article added and indexed successfully!&quot;</span><span class="p">}),</span> <span class="mi">201</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">es_error</span><span class="p">:</span>
+            <span class="c1"># Si l&#39;indexation dans Elasticsearch échoue, faites un rollback de la transaction de la base de données</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Failed to index the article in Elasticsearch: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">es_error</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}),</span> <span class="mi">500</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">db_error</span><span class="p">:</span>
+        <span class="c1"># Si la mise à jour de la base de données échoue, renvoyez une erreur appropriée</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Failed to add the article to the database: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">db_error</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}),</span> <span class="mi">500</span></div>
+
+
+
+    
+
+
+
+<div class="viewcode-block" id="edit_article">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.edit_article">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">edit_article</span><span class="p">(</span><span class="n">article_id</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">article</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Article not found&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+    
+    <span class="n">current_user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;PUT&#39;</span><span class="p">:</span>
+        <span class="c1"># Update the article fields</span>
+        <span class="n">article</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">article</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">article</span><span class="o">.</span><span class="n">abstract</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="n">article</span><span class="o">.</span><span class="n">abstract</span><span class="p">)</span>
+        <span class="n">article</span><span class="o">.</span><span class="n">full_text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;full_text&#39;</span><span class="p">,</span> <span class="n">article</span><span class="o">.</span><span class="n">full_text</span><span class="p">)</span>
+        <span class="n">article</span><span class="o">.</span><span class="n">pdf_url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pdf_url&#39;</span><span class="p">,</span> <span class="n">article</span><span class="o">.</span><span class="n">pdf_url</span><span class="p">)</span>
+
+        <span class="c1"># Update other attributes</span>
+        <span class="n">article</span><span class="o">.</span><span class="n">references</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">reference_data</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;references&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">reference</span> <span class="o">=</span> <span class="n">BibliographicReference</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">reference_data</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">reference</span><span class="p">:</span>
+                <span class="c1"># Create a new reference if not exists</span>
+                <span class="n">reference</span> <span class="o">=</span> <span class="n">BibliographicReference</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">reference_data</span><span class="p">)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+
+            <span class="n">article</span><span class="o">.</span><span class="n">references</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+
+        <span class="n">article</span><span class="o">.</span><span class="n">keywords</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">keyword_data</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keywords&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">keyword</span> <span class="o">=</span> <span class="n">Keyword</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">keyword</span><span class="o">=</span><span class="n">keyword_data</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">keyword</span><span class="p">:</span>
+                <span class="c1"># Create a new keyword if not exists</span>
+                <span class="n">keyword</span> <span class="o">=</span> <span class="n">Keyword</span><span class="p">(</span><span class="n">keyword</span><span class="o">=</span><span class="n">keyword_data</span><span class="p">)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+
+            <span class="n">article</span><span class="o">.</span><span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+
+        <span class="c1"># Update authors</span>
+        <span class="n">updated_authors</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">article</span><span class="o">.</span><span class="n">authors</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">author_data</span> <span class="ow">in</span> <span class="n">updated_authors</span><span class="p">:</span>
+            <span class="n">author</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">author_data</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">author</span><span class="p">:</span>
+                <span class="c1"># Create a new author if not exists</span>
+                <span class="n">author</span> <span class="o">=</span> <span class="n">Author</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">author_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">email</span><span class="o">=</span><span class="n">author_data</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">])</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
+
+            <span class="n">article</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
+
+        <span class="c1"># Save the updated article</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="c1"># Update the corresponding Elasticsearch index</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">es</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;articles_index&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">elasticsearch_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">elasticsearch_id</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;doc&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                    <span class="s2">&quot;abstract&quot;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">abstract</span><span class="p">,</span>
+                    <span class="s2">&quot;full_text&quot;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">full_text</span><span class="p">,</span>
+                    <span class="s2">&quot;keywords&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">keyword</span><span class="o">.</span><span class="n">keyword</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">keywords</span><span class="p">],</span>
+                    <span class="s2">&quot;pdf_url&quot;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">pdf_url</span><span class="p">,</span>
+                    <span class="s2">&quot;references&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">reference</span><span class="o">.</span><span class="n">reference</span> <span class="k">for</span> <span class="n">reference</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">references</span><span class="p">],</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%SZ&#39;</span><span class="p">),</span>  <span class="c1"># Format date as per Elasticsearch</span>
+                    <span class="s2">&quot;authors&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">author</span><span class="o">.</span><span class="n">email</span><span class="p">}</span> <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">authors</span><span class="p">],</span>
+                    <span class="s2">&quot;institution_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">inst</span><span class="o">.</span><span class="n">institution_name</span> <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">article</span><span class="o">.</span><span class="n">authors</span> <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">author</span><span class="o">.</span><span class="n">institutions</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">es_error</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Failed to update the article in Elasticsearch: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">es_error</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}),</span> <span class="mi">500</span>
+
+        <span class="c1"># Create a new ArticleEdit record</span>
+        <span class="n">edit</span> <span class="o">=</span> <span class="n">ArticleEdit</span><span class="p">(</span>
+            <span class="n">article_id</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">current_user_id</span><span class="p">,</span>
+            <span class="n">edited_at</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edit</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Article edited successfully&#39;</span><span class="p">})</span></div>
+
+
+
+
+
+<span class="c1">#delete article </span>
+<div class="viewcode-block" id="delete_article">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.delete_article">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">delete_article</span><span class="p">(</span><span class="n">article_id</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">article</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Article not found!&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+        <span class="n">ArticleEdit</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">article_id</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+       <span class="c1">#FavoriteArticle.query.filter_by(article_id=article.id).delete()</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Article and associated data deleted successfully!&#39;</span><span class="p">}),</span> <span class="mi">200</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+    
+
+
+
+
+
+    <span class="c1">#------------------------------------ EDITS ARTICLE-------------------------------------</span>
+
+
+<div class="viewcode-block" id="get_article_edits">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.get_article_edits">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get_article_edits</span><span class="p">(</span><span class="n">article_id</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">article</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="s1">&#39;Article not found&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+
+    <span class="c1"># Get all edits associated with the article</span>
+    <span class="n">edits</span> <span class="o">=</span> <span class="n">ArticleEdit</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">article_id</span><span class="o">=</span><span class="n">article</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="c1"># Format edits data</span>
+    <span class="n">edits_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">edit</span> <span class="ow">in</span> <span class="n">edits</span><span class="p">:</span>
+        <span class="n">edit_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">edit</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="n">edit</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="s1">&#39;edited_at&#39;</span><span class="p">:</span> <span class="n">edit</span><span class="o">.</span><span class="n">edited_at</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">edits_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edit_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;edits&#39;</span><span class="p">:</span> <span class="n">edits_data</span><span class="p">})</span></div>
+
+    
+
+
+
+
+
+
+
+    <span class="c1">#------------------------------------ ELASTIC SEARCH GET-------------------------------------</span>
+
+
+
+<span class="c1">#get one article from elastic search</span>
+<div class="viewcode-block" id="get_article_from_elasticsearch">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.get_article_from_elasticsearch">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get_article_from_elasticsearch</span><span class="p">(</span><span class="n">article_id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Recherchez l&#39;ID Elasticsearch associé à l&#39;article_id dans la table de mappage</span>
+        <span class="n">mapping_entry</span> <span class="o">=</span> <span class="n">ArticleElasticsearchMapping</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">article_id</span><span class="o">=</span><span class="n">article_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mapping_entry</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Mapping entry not found for article ID </span><span class="si">{</span><span class="n">article_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+
+        <span class="c1"># Récupérez l&#39;elasticsearch_id de l&#39;entrée de mappage</span>
+        <span class="n">elasticsearch_id</span> <span class="o">=</span> <span class="n">mapping_entry</span><span class="o">.</span><span class="n">elasticsearch_id</span>
+
+        <span class="c1"># Recherchez l&#39;article dans Elasticsearch en utilisant l&#39;elasticsearch_id</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;articles_index&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">elasticsearch_id</span><span class="p">)</span>
+        <span class="n">article_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;_source&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Formatez la réponse selon vos besoins</span>
+        <span class="n">formatted_response</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">article_id</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;abstract&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;full_text&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;full_text&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;pdf_url&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;pdf_url&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;references&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;references&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;authors&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;institution_names&#39;</span><span class="p">:</span> <span class="n">article_data</span><span class="p">[</span><span class="s1">&#39;institution_names&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="n">formatted_response</span><span class="p">}),</span> <span class="mi">200</span>
+
+    <span class="k">except</span> <span class="n">NotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Article not found in Elasticsearch with ID </span><span class="si">{</span><span class="n">elasticsearch_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">}),</span> <span class="mi">404</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Error retrieving article: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">}),</span> <span class="mi">500</span></div>
+
+    
+
+<div class="viewcode-block" id="get_all_articles_from_elasticsearch">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.get_all_articles_from_elasticsearch">[docs]</a>
+<span class="nd">@jwt_required</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">get_all_articles_from_elasticsearch</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">get_jwt_identity</span><span class="p">()</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+
+        <span class="c1"># Get IDs of favorite articles for the user</span>
+        <span class="n">favorite_article_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">article</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">user</span><span class="o">.</span><span class="n">favorite_articles</span><span class="p">}</span>
+
+        <span class="c1"># Initialize variables for pagination</span>
+        <span class="n">page_size</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Adjust as needed</span>
+        <span class="n">current_page</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">total_hits</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="n">formatted_response</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">formatted_response</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">total_hits</span><span class="p">:</span>
+            <span class="c1"># Search documents in the Elasticsearch index with pagination</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;articles_index&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;match_all&quot;</span><span class="p">:</span> <span class="p">{}},</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">page_size</span><span class="p">,</span> <span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">current_page</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">page_size</span><span class="p">})</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;hits&#39;</span><span class="p">][</span><span class="s1">&#39;hits&#39;</span><span class="p">]</span>
+            <span class="n">total_hits</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;hits&#39;</span><span class="p">][</span><span class="s1">&#39;total&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Format the response with favorite status and article IDs</span>
+            <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+                <span class="n">es_id</span> <span class="o">=</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+                <span class="n">db_id</span> <span class="o">=</span> <span class="n">get_db_article_id</span><span class="p">(</span><span class="n">es_id</span><span class="p">)</span>
+                <span class="n">is_favorite</span> <span class="o">=</span> <span class="n">db_id</span> <span class="ow">in</span> <span class="n">favorite_article_ids</span>
+                <span class="n">article_data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;es_id&#39;</span><span class="p">:</span> <span class="n">es_id</span><span class="p">,</span>
+                    <span class="s1">&#39;db_id&#39;</span><span class="p">:</span> <span class="n">db_id</span><span class="p">,</span>
+                    <span class="s1">&#39;is_favorite&#39;</span><span class="p">:</span> <span class="n">is_favorite</span><span class="p">,</span>
+                    <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;abstract&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;abstract&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;full_text&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;full_text&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;keywords&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;pdf_url&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;pdf_url&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;references&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;references&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;authors&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;authors&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;institution_names&#39;</span><span class="p">:</span> <span class="n">hit</span><span class="p">[</span><span class="s1">&#39;_source&#39;</span><span class="p">][</span><span class="s1">&#39;institution_names&#39;</span><span class="p">]</span>
+                <span class="p">}</span>
+                <span class="n">formatted_response</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">article_data</span><span class="p">)</span>
+
+            <span class="c1"># Move to the next page</span>
+            <span class="n">current_page</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;articles&#39;</span><span class="p">:</span> <span class="n">formatted_response</span><span class="p">}),</span> <span class="mi">200</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Error retrieving articles: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">}),</span> <span class="mi">500</span></div>
+
+
+<div class="viewcode-block" id="get_db_article_id">
+<a class="viewcode-back" href="../../../app.controllers.html#app.controllers.article_controller.get_db_article_id">[docs]</a>
+<span class="k">def</span> <span class="nf">get_db_article_id</span><span class="p">(</span><span class="n">es_id</span><span class="p">):</span>
+    <span class="c1"># Implement logic to retrieve article ID from your database based on Elasticsearch ID</span>
+    <span class="c1"># This could involve querying your database or using a mapping between Elasticsearch and database IDs</span>
+    <span class="c1"># For simplicity, let&#39;s assume a direct mapping for now</span>
+    <span class="n">mapping_entry</span> <span class="o">=</span> <span class="n">ArticleElasticsearchMapping</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">elasticsearch_id</span><span class="o">=</span><span class="n">es_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">mapping_entry</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mapping_entry</span><span class="o">.</span><span class="n">article_id</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2024, AchrafEddineBoudiaf.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

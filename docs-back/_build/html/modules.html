@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sciverse—flask-app-search-with-elasticsearch-2 &mdash; Documentation sciverse-backend 0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5cd26065"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=d99ca74e"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="JsonGnr module" href="JsonGnr.html" />
+    <link rel="prev" title="Welcome to sciverse-backend’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            sciverse-backend
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">sciverse—flask-app-search-with-elasticsearch-2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="JsonGnr.html">JsonGnr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.html">app package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init_db.html">init_db module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">run module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tempCodeRunnerFile.html">tempCodeRunnerFile module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sciverse-backend</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">sciverse—flask-app-search-with-elasticsearch-2</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sciverse-flask-app-search-with-elasticsearch-2">
+<h1>sciverse—flask-app-search-with-elasticsearch-2<a class="headerlink" href="#sciverse-flask-app-search-with-elasticsearch-2" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="JsonGnr.html">JsonGnr module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app.html">app package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.controllers.html">app.controllers package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html#module-app.controllers.admin_controller">app.controllers.admin_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html#module-app.controllers.article_controller">app.controllers.article_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html#module-app.controllers.auth_controller">app.controllers.auth_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html#module-app.controllers.favorite_controller">app.controllers.favorite_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html#module-app.controllers.moderator_controller">app.controllers.moderator_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html#module-app.controllers.user_controller">app.controllers.user_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.controllers.html#module-app.controllers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#module-app.config">app.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#module-app.elasticsearch">app.elasticsearch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.elasticsearch.get_db_article_id"><code class="docutils literal notranslate"><span class="pre">get_db_article_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.elasticsearch.search_article"><code class="docutils literal notranslate"><span class="pre">search_article()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#module-app.forms">app.forms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#module-app.models">app.models module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.Article"><code class="docutils literal notranslate"><span class="pre">Article</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.abstract"><code class="docutils literal notranslate"><span class="pre">Article.abstract</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.article_edits"><code class="docutils literal notranslate"><span class="pre">Article.article_edits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.article_elasticsearch_mapping"><code class="docutils literal notranslate"><span class="pre">Article.article_elasticsearch_mapping</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.authors"><code class="docutils literal notranslate"><span class="pre">Article.authors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.date"><code class="docutils literal notranslate"><span class="pre">Article.date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.full_text"><code class="docutils literal notranslate"><span class="pre">Article.full_text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.id"><code class="docutils literal notranslate"><span class="pre">Article.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.keywords"><code class="docutils literal notranslate"><span class="pre">Article.keywords</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.pdf_url"><code class="docutils literal notranslate"><span class="pre">Article.pdf_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.query"><code class="docutils literal notranslate"><span class="pre">Article.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.references"><code class="docutils literal notranslate"><span class="pre">Article.references</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Article.title"><code class="docutils literal notranslate"><span class="pre">Article.title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.ArticleAuthor"><code class="docutils literal notranslate"><span class="pre">ArticleAuthor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleAuthor.article_id"><code class="docutils literal notranslate"><span class="pre">ArticleAuthor.article_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleAuthor.author_id"><code class="docutils literal notranslate"><span class="pre">ArticleAuthor.author_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleAuthor.id"><code class="docutils literal notranslate"><span class="pre">ArticleAuthor.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleAuthor.query"><code class="docutils literal notranslate"><span class="pre">ArticleAuthor.query</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.ArticleEdit"><code class="docutils literal notranslate"><span class="pre">ArticleEdit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleEdit.article_id"><code class="docutils literal notranslate"><span class="pre">ArticleEdit.article_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleEdit.edited_at"><code class="docutils literal notranslate"><span class="pre">ArticleEdit.edited_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleEdit.id"><code class="docutils literal notranslate"><span class="pre">ArticleEdit.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleEdit.query"><code class="docutils literal notranslate"><span class="pre">ArticleEdit.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleEdit.user_id"><code class="docutils literal notranslate"><span class="pre">ArticleEdit.user_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.ArticleElasticsearchMapping"><code class="docutils literal notranslate"><span class="pre">ArticleElasticsearchMapping</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleElasticsearchMapping.article_id"><code class="docutils literal notranslate"><span class="pre">ArticleElasticsearchMapping.article_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleElasticsearchMapping.elasticsearch_id"><code class="docutils literal notranslate"><span class="pre">ArticleElasticsearchMapping.elasticsearch_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleElasticsearchMapping.id"><code class="docutils literal notranslate"><span class="pre">ArticleElasticsearchMapping.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleElasticsearchMapping.query"><code class="docutils literal notranslate"><span class="pre">ArticleElasticsearchMapping.query</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.ArticleKeyword"><code class="docutils literal notranslate"><span class="pre">ArticleKeyword</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleKeyword.article_id"><code class="docutils literal notranslate"><span class="pre">ArticleKeyword.article_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleKeyword.id"><code class="docutils literal notranslate"><span class="pre">ArticleKeyword.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleKeyword.keyword_id"><code class="docutils literal notranslate"><span class="pre">ArticleKeyword.keyword_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleKeyword.query"><code class="docutils literal notranslate"><span class="pre">ArticleKeyword.query</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.ArticleReference"><code class="docutils literal notranslate"><span class="pre">ArticleReference</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleReference.article_id"><code class="docutils literal notranslate"><span class="pre">ArticleReference.article_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleReference.id"><code class="docutils literal notranslate"><span class="pre">ArticleReference.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleReference.query"><code class="docutils literal notranslate"><span class="pre">ArticleReference.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.ArticleReference.reference_id"><code class="docutils literal notranslate"><span class="pre">ArticleReference.reference_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.Author"><code class="docutils literal notranslate"><span class="pre">Author</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Author.email"><code class="docutils literal notranslate"><span class="pre">Author.email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Author.id"><code class="docutils literal notranslate"><span class="pre">Author.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Author.institutions"><code class="docutils literal notranslate"><span class="pre">Author.institutions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Author.name"><code class="docutils literal notranslate"><span class="pre">Author.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Author.query"><code class="docutils literal notranslate"><span class="pre">Author.query</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.AuthorInstitution"><code class="docutils literal notranslate"><span class="pre">AuthorInstitution</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.AuthorInstitution.author_id"><code class="docutils literal notranslate"><span class="pre">AuthorInstitution.author_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.AuthorInstitution.id"><code class="docutils literal notranslate"><span class="pre">AuthorInstitution.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.AuthorInstitution.institution_id"><code class="docutils literal notranslate"><span class="pre">AuthorInstitution.institution_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.AuthorInstitution.query"><code class="docutils literal notranslate"><span class="pre">AuthorInstitution.query</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.BibliographicReference"><code class="docutils literal notranslate"><span class="pre">BibliographicReference</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.BibliographicReference.id"><code class="docutils literal notranslate"><span class="pre">BibliographicReference.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.BibliographicReference.query"><code class="docutils literal notranslate"><span class="pre">BibliographicReference.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.BibliographicReference.reference"><code class="docutils literal notranslate"><span class="pre">BibliographicReference.reference</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.FavoriteArticle"><code class="docutils literal notranslate"><span class="pre">FavoriteArticle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.FavoriteArticle.article_id"><code class="docutils literal notranslate"><span class="pre">FavoriteArticle.article_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.FavoriteArticle.id"><code class="docutils literal notranslate"><span class="pre">FavoriteArticle.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.FavoriteArticle.query"><code class="docutils literal notranslate"><span class="pre">FavoriteArticle.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.FavoriteArticle.user_id"><code class="docutils literal notranslate"><span class="pre">FavoriteArticle.user_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.Institution"><code class="docutils literal notranslate"><span class="pre">Institution</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Institution.id"><code class="docutils literal notranslate"><span class="pre">Institution.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Institution.institution_name"><code class="docutils literal notranslate"><span class="pre">Institution.institution_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Institution.query"><code class="docutils literal notranslate"><span class="pre">Institution.query</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.Keyword"><code class="docutils literal notranslate"><span class="pre">Keyword</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Keyword.id"><code class="docutils literal notranslate"><span class="pre">Keyword.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Keyword.keyword"><code class="docutils literal notranslate"><span class="pre">Keyword.keyword</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.Keyword.query"><code class="docutils literal notranslate"><span class="pre">Keyword.query</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.favorite_articles"><code class="docutils literal notranslate"><span class="pre">User.favorite_articles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.firstName"><code class="docutils literal notranslate"><span class="pre">User.firstName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.lastName"><code class="docutils literal notranslate"><span class="pre">User.lastName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.nature"><code class="docutils literal notranslate"><span class="pre">User.nature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.password_hash"><code class="docutils literal notranslate"><span class="pre">User.password_hash</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.query"><code class="docutils literal notranslate"><span class="pre">User.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.role"><code class="docutils literal notranslate"><span class="pre">User.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.user_id"><code class="docutils literal notranslate"><span class="pre">User.user_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#module-app.routes">app.routes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#module-app.utils">app.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#module-app.views">app.views module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.html#module-app">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init_db.html">init_db module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">run module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tempCodeRunnerFile.html">tempCodeRunnerFile module</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to sciverse-backend’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="JsonGnr.html" class="btn btn-neutral float-right" title="JsonGnr module" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2024, AchrafEddineBoudiaf.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
